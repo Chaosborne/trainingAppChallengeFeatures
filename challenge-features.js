@@ -160,20 +160,6 @@ class App {
     inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
   }
 
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  // Мы все равно в localStorage полностью переписываем workouts
-  // Может быть, стоит просто удалять старую тренировку и создавать новую?
-  // Тогда можно использовать _newWorkout
-  //
-  // нет, тогда, если мы редактируем какую-то из прошлых тренировок, она перескочет в начало, с новым id и датой
-  //
-  //
   _newWorkout(e) {
     const areNumbers = (...numbers) =>
       numbers.every(num => Number.isFinite(num));
