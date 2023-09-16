@@ -7,7 +7,6 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputTemp = document.querySelector('.form__input--temp');
 const inputClimb = document.querySelector('.form__input--climb');
-const sidebar = document.querySelector('.sidebar');
 
 class Workout {
   date = new Date();
@@ -69,7 +68,6 @@ class App {
   #map;
   #mapEvent;
   #workouts = [];
-  #workoutId;
 
   constructor() {
     // Получение местоположения пользователя
@@ -79,18 +77,14 @@ class App {
     this._getLocalStorageData();
 
     // Добавление обработчика события
-    this.submitListenerLink = this._newWorkout.bind(this); // чтобы иметь доступ в _showEditForm() для отмены слушателя
-    form.addEventListener('submit', this.submitListenerLink);
-    // form.addEventListener('submit', this._newWorkout.bind(this));
+
+    form.addEventListener('submit', this._newWorkout.bind(this));
 
     // Меняем поле Темп на Подъем при выборе Велосипед
     inputType.addEventListener('change', this._toggleClimbField);
 
     // Переход карты к маркеру по клику на тренировку в боковой панели
     containerWorkouts.addEventListener('click', this._moveToWorkout.bind(this));
-
-    // Отображение кнопки редактирования тренировки по клику на тренировку в боковой панели
-    containerWorkouts.addEventListener('click', this._showEditBtn.bind(this));
   }
 
   _getPosition() {
@@ -122,7 +116,7 @@ class App {
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
 
-    // Обработка клика на карте
+    // ОБработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
 
     // Отображение тренировок из localStorage на карте
@@ -132,21 +126,10 @@ class App {
   }
 
   _showForm(e) {
-    this.#mapEvent = e;
+    // **
+    this.#mapEvent = e; // **
     form.classList.remove('hidden');
     inputDistance.focus();
-  }
-
-  // prettier-ignore
-  _showEditForm(e) {
-
-    this.#mapEvent = e;
-    form.classList.remove('hidden');
-    inputDistance.focus();
-
-    // Заменяем слушатель события
-    form.removeEventListener('submit', this.submitListenerLink);
-    form.addEventListener('submit', this._editWorkout.bind(this))
   }
 
   _hideForm() {
@@ -217,74 +200,6 @@ class App {
 
     // Добавить все тренировки в локальное хранилище
     this._addWorkoutsToLocalStorage();
-  }
-
-  _editWorkout(e) {
-    e.preventDefault();
-    // Достать значение из localStorage, сделать JSON.parse
-    this.#workouts = JSON.parse(localStorage.getItem('workouts'));
-
-    // Получить данные из формы
-    const type = inputType.value;
-    const distance = +inputDistance.value;
-    const duration = +inputDuration.value;
-
-    // Внести изменения в JSON
-    // используем this.#workoutId из _showEditBtn
-    // prettier-ignore
-    let changeableWorkout = this.#workouts.find(el => el.id === this.#workoutId);
-
-    // Помещаем новые данные
-    // проверка валидности данных
-    const areNumbers = (...numbers) =>
-      numbers.every(num => Number.isFinite(num));
-    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
-    // помещение данных в зависимости от типа тренировки
-    if (type === 'running') {
-      const temp = +inputTemp.value;
-      if (
-        !areNumbers(distance, duration, temp) ||
-        !areNumbersPositive(distance, duration, temp)
-      )
-        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
-
-      changeableWorkout.type = type;
-      changeableWorkout.distance = distance;
-      changeableWorkout.duration = duration;
-      changeableWorkout.temp = temp;
-    }
-    if (type === 'cycling') {
-      const climb = +inputClimb.value;
-      if (
-        !areNumbers(distance, duration, climb) ||
-        !areNumbersPositive(distance, duration)
-      )
-        return alert('Введите положительное число');
-
-      changeableWorkout.type = type;
-      changeableWorkout.distance = distance;
-      changeableWorkout.duration = duration;
-      changeableWorkout.climb = climb;
-    }
-
-    // Помещаем обновленный массив с тренировками в localStorage
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
-
-    // Отобразить обновленную тренировку в списке
-    // очистить сайдбар
-    sidebar.innerHTML = '';
-    document.location.reload();
-
-    // отобразить актуальные тренировки
-    this.#workouts.forEach(workout => {
-      this._displayWorkoutOnSidebar(workout);
-    });
-
-    // Очистить поля ввода данных и спрятать форму
-    this._hideForm();
-
-    // Спрятать кнопку
-    this._hideEditBtn();
   }
 
   // prettier-ignore
@@ -372,35 +287,8 @@ class App {
     // console.log(workout);
   }
 
-  _showEditBtn(e) {
-    if (!e.target.closest('.workout')) return;
-    if (document.querySelector('.workout-edit__btn')) return;
-
-    this.#workoutId = e.target.closest('.workout').dataset.id;
-
-    // if ( // can do this, but like guard clause most
-    //   !document.querySelector('.workout-edit__btn') &&
-    //   !e.target.classList.contains('workouts')
-    // ) {
-    e.target
-      .closest('.workout')
-      .insertAdjacentHTML(
-        'beforeEnd',
-        '<button class = "workout-edit__btn">Редактировать тренировку</button>'
-      );
-    document
-      .querySelector('.workout-edit__btn')
-      .addEventListener('click', this._showEditForm.bind(this));
-    // }
-  }
-
-  _hideEditBtn() {
-    document
-      .querySelector('.workout-edit__btn')
-      .removeEventListener('click', this._showEditForm.bind(this));
-
-    const button = document.querySelector('.workout-edit__btn');
-    button.remove();
+  _addWorkoutsToLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
   _getLocalStorageData() {
@@ -414,10 +302,6 @@ class App {
     this.#workouts.forEach(workout => {
       this._displayWorkoutOnSidebar(workout);
     });
-  }
-
-  _addWorkoutsToLocalStorage() {
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
   reset() {
