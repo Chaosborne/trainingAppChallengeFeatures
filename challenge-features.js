@@ -374,7 +374,7 @@ class App {
 
   _showEditBtn(e) {
     if (!e.target.closest('.workout')) return;
-    // if (document.querySelector('.workout-edit__btn')) return;
+    if (document.querySelector('.workout-edit__btn')) return;
 
     this.#workoutId = e.target.closest('.workout').dataset.id;
 
