@@ -304,15 +304,13 @@ class App {
   }
 
   // Обрабатываем нажатие на кнопки тренировки
-  #workoutElem;
+  #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
 
   _buttonClickProcessing(e) {
     if (!e.target.classList.contains('workout-btn')) return;
 
-    // Получаем родителя нажатой кнопки
     this.#workoutElem = e.target.closest('.workout');
 
-    // Применяем к родителю действия
     if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
       this._editWorkout();
     }
