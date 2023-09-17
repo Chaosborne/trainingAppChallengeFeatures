@@ -292,17 +292,16 @@ class App {
       pan: { duration: 1 },
     });
 
-    //
-    //
-    //
-    //
-    //
-    //
-    //
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
     this._workoutBtnClickProcessing(e);
   }
 
+  //
+  //
+  //
+  //
+  //
+  //
   // Обрабатываем нажатие на кнопки тренировки
   #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
 
@@ -321,17 +320,19 @@ class App {
 
   _editWorkout() {
     console.log(`We edit the ${this.#workoutElem.dataset.id} workout`);
+    // отобразить поля ввода новых данных
+
+    // получить localStorage, получить тренировки, изменить редактируемую тренировку
+
+    // сохранить в localStorage
+
+    // отобразить измененный список тренировок
   }
 
   _removeWorkout() {
     console.log(`We remove the ${this.#workoutElem.dataset.id} workout`);
   }
 
-  //
-  //
-  //
-  //
-  //
   //
   //
   //
