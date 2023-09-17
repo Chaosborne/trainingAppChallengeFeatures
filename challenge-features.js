@@ -319,10 +319,19 @@ class App {
   }
 
   _editWorkout() {
-    console.log(`We edit the ${this.#workoutElem.dataset.id} workout`);
-    // отобразить поля ввода новых данных
+    // We edit the ${this.#workoutElem.dataset.id} workout
 
-    // получить localStorage, получить тренировки, изменить редактируемую тренировку
+    // получить localStorage, получить тренировки
+    const workoutsJSON = JSON.parse(localStorage.getItem('workouts'));
+    // prettier-ignore
+    const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
+    console.log(workoutJSON);
+
+    // отобразить поля ввода новых данных
+    // prettier-ignore
+    this.#workoutElem.querySelector('.workout__value').innerHTML = `<input class="form__input form__input--distance" />`;
+    // this.#workoutElem.querySelector('.workout__value').innerHTML = `<input class="form__input form__input--distance" />`;
+    // они все workout value. Надо вводить какой-то класс, чтобы в нужный блок нужный инпут подставлять
 
     // сохранить в localStorage
 
@@ -330,7 +339,7 @@ class App {
   }
 
   _removeWorkout() {
-    console.log(`We remove the ${this.#workoutElem.dataset.id} workout`);
+    // We remove the ${this.#workoutElem.dataset.id} workout
   }
 
   //
