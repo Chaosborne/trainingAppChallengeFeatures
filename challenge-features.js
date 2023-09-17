@@ -249,8 +249,8 @@ class App {
             <span class="workout__unit">шаг/мин</span>
           </div>
           <div class="workout__btns">
-            <button class="workout__edit-btn">Редактировать</button>
-            <button class="workout__delete-btn">Удалить</button>
+            <button class="workout__edit-btn">Edit</button>
+            <button class="workout__delete-btn">Remove</button>
           </div>
         </li>
         
@@ -269,8 +269,8 @@ class App {
             <span class="workout__unit">м</span>
           </div>
           <div class="workout__btns">
-            <button class="workout__edit-btn">Редактировать</button>
-            <button class="workout__delete-btn">Удалить</button>
+            <button class="workout__edit-btn">Edit</button>
+            <button class="workout__delete-btn">Remove</button>
           </div>
         </li>
       `;
