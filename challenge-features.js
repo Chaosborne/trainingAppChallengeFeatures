@@ -292,8 +292,12 @@ class App {
       pan: { duration: 1 },
     });
 
-    // workout.click();
-    // console.log(workout);
+    // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
+    this._workoutBtnReaction(e);
+  }
+
+  _workoutBtnReaction(e) {
+    console.log(e.target.closest('.workout').dataset.id);
   }
 
   _addWorkoutsToLocalStorage() {
