@@ -248,7 +248,12 @@ class App {
             <span class="workout__value">${workout.temp}</span>
             <span class="workout__unit">шаг/мин</span>
           </div>
+          <div class="workout__btns">
+            <button class="workout-btn workout__edit-btn">Edit</button>
+            <button class="workout-btn workout__delete-btn">Remove</button>
+          </div>
         </li>
+        
       `;
     }
     if (workout.type === 'cycling') {
@@ -262,6 +267,10 @@ class App {
             <span class="workout__icon">🏔</span>
             <span class="workout__value">${workout.climb}</span>
             <span class="workout__unit">м</span>
+          </div>
+          <div class="workout__btns">
+            <button class="workout-btn workout__edit-btn">Edit</button>
+            <button class="workout-btn workout__delete-btn">Remove</button>
           </div>
         </li>
       `;
@@ -283,9 +292,51 @@ class App {
       pan: { duration: 1 },
     });
 
-    // workout.click();
-    // console.log(workout);
+    // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
+    this._workoutBtnClickProcessing(e);
   }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  // Обрабатываем нажатие на кнопки тренировки
+  #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
+
+  _workoutBtnClickProcessing(e) {
+    if (!e.target.classList.contains('workout-btn')) return;
+
+    this.#workoutElem = e.target.closest('.workout');
+
+    if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
+      this._editWorkout();
+    }
+    if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
+      this._removeWorkout();
+    }
+  }
+
+  _editWorkout() {
+    console.log(`We edit the ${this.#workoutElem.dataset.id} workout`);
+    // отобразить поля ввода новых данных
+
+    // получить localStorage, получить тренировки, изменить редактируемую тренировку
+
+    // сохранить в localStorage
+
+    // отобразить измененный список тренировок
+  }
+
+  _removeWorkout() {
+    console.log(`We remove the ${this.#workoutElem.dataset.id} workout`);
+  }
+
+  //
+  //
+  //
+  //
 
   _addWorkoutsToLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
