@@ -1,0 +1,13 @@
+.workout__btns {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.workout__edit-btn,
+.workout__delete-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    background: rgb(226, 226, 226);
+}

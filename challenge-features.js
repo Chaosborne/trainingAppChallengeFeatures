@@ -248,7 +248,12 @@ class App {
             <span class="workout__value">${workout.temp}</span>
             <span class="workout__unit">шаг/мин</span>
           </div>
+          <div class="workout__btns">
+            <button class="workout__edit-btn">Редактировать</button>
+            <button class="workout__delete-btn">Удалить</button>
+          </div>
         </li>
+        
       `;
     }
     if (workout.type === 'cycling') {
