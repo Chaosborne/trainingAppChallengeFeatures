@@ -300,13 +300,13 @@ class App {
     //
     //
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
-    this._buttonClickProcessing(e);
+    this._workoutBtnClickProcessing(e);
   }
 
   // Обрабатываем нажатие на кнопки тренировки
   #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
 
-  _buttonClickProcessing(e) {
+  _workoutBtnClickProcessing(e) {
     if (!e.target.classList.contains('workout-btn')) return;
 
     this.#workoutElem = e.target.closest('.workout');
