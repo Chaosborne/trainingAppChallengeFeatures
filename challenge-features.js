@@ -249,8 +249,8 @@ class App {
             <span class="workout__unit">шаг/мин</span>
           </div>
           <div class="workout__btns">
-            <button class="workout__edit-btn">Edit</button>
-            <button class="workout__delete-btn">Remove</button>
+            <button class="workout-btn workout__edit-btn">Edit</button>
+            <button class="workout-btn workout__delete-btn">Remove</button>
           </div>
         </li>
         
@@ -269,8 +269,8 @@ class App {
             <span class="workout__unit">м</span>
           </div>
           <div class="workout__btns">
-            <button class="workout__edit-btn">Edit</button>
-            <button class="workout__delete-btn">Remove</button>
+            <button class="workout-btn workout__edit-btn">Edit</button>
+            <button class="workout-btn workout__delete-btn">Remove</button>
           </div>
         </li>
       `;
@@ -292,13 +292,52 @@ class App {
       pan: { duration: 1 },
     });
 
+    //
+    //
+    //
+    //
+    //
+    //
+    //
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
-    this._workoutBtnReaction(e);
+    this._buttonClickProcessing(e);
   }
 
-  _workoutBtnReaction(e) {
-    console.log(e.target.closest('.workout').dataset.id);
+  // Обрабатываем нажатие на кнопки тренировки
+  #workoutElem;
+
+  _buttonClickProcessing(e) {
+    if (!e.target.classList.contains('workout-btn')) return;
+
+    // Получаем родителя нажатой кнопки
+    this.#workoutElem = e.target.closest('.workout');
+
+    // Применяем к родителю действия
+    if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
+      this._editWorkout();
+    }
+    if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
+      this._removeWorkout();
+    }
   }
+
+  _editWorkout() {
+    console.log(`We edit the ${this.#workoutElem.dataset.id} workout`);
+  }
+
+  _removeWorkout() {
+    console.log(`We remove the ${this.#workoutElem.dataset.id} workout`);
+  }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   _addWorkoutsToLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
