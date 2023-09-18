@@ -328,26 +328,25 @@ class App {
     console.log(workoutJSON);
 
     // отобразить поля ввода новых данных
-    // prettier-ignore
-    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
-    workoutDetails.forEach(function name(detail) {
-      if (detail.classList.contains('workout__value--distance')) {
-        detail.innerHTML = `<input class="form__input form__input--distance" value="${workoutJSON.distance}" />`;
-      }
-      if (detail.classList.contains('workout__value--duration')) {
-        detail.innerHTML = `<input class="form__input form__input--duration" value="${workoutJSON.duration}" />`;
-      }
-      if (detail.classList.contains('workout__value--pace')) {
-        detail.innerHTML = `<input class="form__input form__input--pace" value="${workoutJSON.pace}" />`;
-      }
-      if (detail.classList.contains('workout__value--temp')) {
-        detail.innerHTML = `<input class="form__input form__input--temp" value="${workoutJSON.temp}" />`;
-      }
-      if (detail.classList.contains('workout__value--speed')) {
-        detail.innerHTML = `<input class="form__input form__input--speed" value="${workoutJSON.speed}" />`;
-      }
-      if (detail.classList.contains('workout__value--climb')) {
-        detail.innerHTML = `<input class="form__input form__input--climb" value="${workoutJSON.climb}" />`;
+    const classToKeyMap = {
+      'workout__value--distance': 'distance',
+      'workout__value--duration': 'duration',
+      'workout__value--pace': 'pace',
+      'workout__value--temp': 'temp',
+      'workout__value--speed': 'speed',
+      'workout__value--climb': 'climb',
+    };
+
+    const workoutDetails =
+      this.#workoutElem.querySelectorAll('.workout__value');
+
+    workoutDetails.forEach(detail => {
+      for (const className in classToKeyMap) {
+        if (detail.classList.contains(className)) {
+          const key = classToKeyMap[className];
+          detail.innerHTML = `<input class="form__input form__input--${key}" value="${workoutJSON[key]}" />`;
+          break; // Break the loop once we've found a matching class
+        }
       }
     });
 
