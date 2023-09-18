@@ -350,8 +350,8 @@ class App {
         detail.innerHTML = `<input class="form__input form__input--climb" value="${workoutJSON.climb}" />`;
       }
     });
-    // this.#workoutElem.querySelector('.workout__value').innerHTML = `<input class="form__input form__input--distance" />`;
-    // они все workout value. Надо вводить какой-то класс, чтобы в нужный блок нужный инпут подставлять
+
+    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
 
     // сохранить в localStorage
 
