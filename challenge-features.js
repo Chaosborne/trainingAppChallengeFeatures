@@ -226,12 +226,12 @@ class App {
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
           <span class="workout__icon">${workout.type === 'running' ? '🏃' : '🚵‍♂️'}</span>
-          <span class="workout__value">${workout.distance}</span>
+          <span class="workout__value workout__value--distance">${workout.distance}</span>
           <span class="workout__unit">км</span>
         </div>
         <div class="workout__details">
           <span class="workout__icon">⏱</span>
-          <span class="workout__value">${workout.duration}</span>
+          <span class="workout__value workout__value--duration">${workout.duration}</span>
           <span class="workout__unit">мин</span>
         </div>
         `;
@@ -240,12 +240,12 @@ class App {
       html += `
           <div class="workout__details">
             <span class="workout__icon">📏⏱</span>
-            <span class="workout__value">${workout.pace.toFixed(2)}</span>
+            <span class="workout__value workout__value--pace">${workout.pace.toFixed(2)}</span>
             <span class="workout__unit">м/мин</span>
           </div>
           <div class="workout__details">
             <span class="workout__icon">👟⏱</span>
-            <span class="workout__value">${workout.temp}</span>
+            <span class="workout__value workout__value--temp">${workout.temp}</span>
             <span class="workout__unit">шаг/мин</span>
           </div>
           <div class="workout__btns">
@@ -260,12 +260,12 @@ class App {
       html += `
             <div class="workout__details">
             <span class="workout__icon">📏⏱</span>
-            <span class="workout__value">${workout.speed.toFixed(2)}</span>
+            <span class="workout__value workout__value--speed">${workout.speed.toFixed(2)}</span>
             <span class="workout__unit">км/ч</span>
           </div>
           <div class="workout__details">
             <span class="workout__icon">🏔</span>
-            <span class="workout__value">${workout.climb}</span>
+            <span class="workout__value workout__value--climb">${workout.climb}</span>
             <span class="workout__unit">м</span>
           </div>
           <div class="workout__btns">
@@ -329,7 +329,27 @@ class App {
 
     // отобразить поля ввода новых данных
     // prettier-ignore
-    this.#workoutElem.querySelector('.workout__value').innerHTML = `<input class="form__input form__input--distance" />`;
+    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
+    workoutDetails.forEach(function name(detail) {
+      if (detail.classList.contains('workout__value--distance')) {
+        detail.innerHTML = `<input class="form__input form__input--distance" value="${workoutJSON.distance}" />`;
+      }
+      if (detail.classList.contains('workout__value--duration')) {
+        detail.innerHTML = `<input class="form__input form__input--duration" value="${workoutJSON.duration}" />`;
+      }
+      if (detail.classList.contains('workout__value--pace')) {
+        detail.innerHTML = `<input class="form__input form__input--pace" value="${workoutJSON.pace}" />`;
+      }
+      if (detail.classList.contains('workout__value--temp')) {
+        detail.innerHTML = `<input class="form__input form__input--temp" value="${workoutJSON.temp}" />`;
+      }
+      if (detail.classList.contains('workout__value--speed')) {
+        detail.innerHTML = `<input class="form__input form__input--speed" value="${workoutJSON.speed}" />`;
+      }
+      if (detail.classList.contains('workout__value--climb')) {
+        detail.innerHTML = `<input class="form__input form__input--climb" value="${workoutJSON.climb}" />`;
+      }
+    });
     // this.#workoutElem.querySelector('.workout__value').innerHTML = `<input class="form__input form__input--distance" />`;
     // они все workout value. Надо вводить какой-то класс, чтобы в нужный блок нужный инпут подставлять
 

@@ -14,3 +14,7 @@
     color: #fff;
     background: #3f464d;
 }
+
+.workout__details input {
+    max-width: 50px;
+}
