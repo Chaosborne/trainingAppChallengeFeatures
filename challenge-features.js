@@ -325,7 +325,7 @@ class App {
     const workoutsJSON = JSON.parse(localStorage.getItem('workouts'));
     // prettier-ignore
     const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
-    console.log(workoutJSON);
+    // console.log(workoutJSON);
 
     // отобразить поля ввода новых данных
     const classToKeyMap = {
@@ -336,15 +336,15 @@ class App {
       'workout__value--speed': 'speed',
       'workout__value--climb': 'climb',
     };
-
-    const workoutDetails =
-      this.#workoutElem.querySelectorAll('.workout__value');
+    // prettier-ignore
+    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
 
     workoutDetails.forEach(detail => {
       for (const className in classToKeyMap) {
         if (detail.classList.contains(className)) {
           const key = classToKeyMap[className];
-          detail.innerHTML = `<input class="form__input form__input--${key}" value="${workoutJSON[key]}" />`;
+          detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+
           break; // Break the loop once we've found a matching class
         }
       }
