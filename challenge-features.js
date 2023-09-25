@@ -332,7 +332,47 @@ class App {
     const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
     workoutDetails.forEach(detail => detail.remove());
 
-    console.log(e.target.closest('.workout').querySelector('.workout__title'));
+    this._showEditFormInsideWorkout(e);
+
+    const workoutElem = e.target.closest('.workout');
+    const formELem = workoutElem.querySelector('.form');
+    workoutElem.style.display = 'block';
+    formELem.style.paddingLeft = '0px';
+    formELem.style.marginBottom = '0.6rem';
+
+    // отобразить форму ввода новых данных
+    // const classToKeyMap = {
+    //   'workout__value--distance': 'distance',
+    //   'workout__value--duration': 'duration',
+    //   'workout__value--pace': 'pace',
+    //   'workout__value--temp': 'temp',
+    //   'workout__value--speed': 'speed',
+    //   'workout__value--climb': 'climb',
+    // };
+    // // prettier-ignore
+    // const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
+
+    // workoutDetails.forEach(detail => {
+    //   for (const className in classToKeyMap) {
+    //     if (detail.classList.contains(className)) {
+    //       const key = classToKeyMap[className];
+    //       detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+
+    //       break; // Break the loop once we've found a matching class
+    //     }
+    //   }
+    // });
+
+    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
+
+    // сохранить в localStorage
+
+    // отобразить измененный список тренировок
+  }
+
+  _showEditFormInsideWorkout(e) {
+    if (e.target.closest('.workout').querySelector('.form')) return;
+
     e.target
       .closest('.workout')
       .querySelector('.workout__title')
@@ -365,38 +405,6 @@ class App {
       <button class="form__btn">OK</button>
     </form>`
       );
-
-    e.target.closest('.workout').style.display = 'block';
-    e.target.closest('.workout').querySelector(form).style.paddingLeft = '0px';
-
-    // отобразить форму ввода новых данных
-    // const classToKeyMap = {
-    //   'workout__value--distance': 'distance',
-    //   'workout__value--duration': 'duration',
-    //   'workout__value--pace': 'pace',
-    //   'workout__value--temp': 'temp',
-    //   'workout__value--speed': 'speed',
-    //   'workout__value--climb': 'climb',
-    // };
-    // // prettier-ignore
-    // const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
-
-    // workoutDetails.forEach(detail => {
-    //   for (const className in classToKeyMap) {
-    //     if (detail.classList.contains(className)) {
-    //       const key = classToKeyMap[className];
-    //       detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
-
-    //       break; // Break the loop once we've found a matching class
-    //     }
-    //   }
-    // });
-
-    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
-
-    // сохранить в localStorage
-
-    // отобразить измененный список тренировок
   }
 
   _removeWorkout() {
