@@ -1,3 +1,4 @@
+
 'use strict';
 
 const form = document.querySelector('.form');
@@ -466,3 +467,5 @@ class App {
 }
 
 const app = new App();
+
+
