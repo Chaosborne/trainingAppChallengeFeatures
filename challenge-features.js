@@ -311,14 +311,14 @@ class App {
     this.#workoutElem = e.target.closest('.workout');
 
     if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
-      this._editWorkout();
+      this._editWorkout(e);
     }
     if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
       this._removeWorkout();
     }
   }
 
-  _editWorkout() {
+  _editWorkout(e) {
     // We edit the ${this.#workoutElem.dataset.id} workout
 
     // получить localStorage, получить тренировки
@@ -330,10 +330,43 @@ class App {
     // Удалить отображение старых данных
     // prettier-ignore
     const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
-    console.log(workoutDetails);
     workoutDetails.forEach(detail => detail.remove());
 
-    // отобразить поля ввода новых данных
+    console.log(e.target.closest('.workout').querySelector('.workout__title'));
+    e.target
+      .closest('.workout')
+      .querySelector('.workout__title')
+      .insertAdjacentHTML(
+        'afterend',
+        `<form class="form">
+      <div class="form__row">
+        <label class="form__label">Тип</label>
+        <select class="form__input form__input--type">
+          <option value="running">Пробежка</option>
+          <option value="cycling">Велосипед</option>
+        </select>
+      </div>
+      <div class="form__row">
+        <label class="form__label">Расстояние</label>
+        <input class="form__input form__input--distance" placeholder="km" />
+      </div>
+      <div class="form__row">
+        <label class="form__label">Длительность</label>
+        <input class="form__input form__input--duration" placeholder="мин" />
+      </div>
+      <div class="form__row">
+        <label class="form__label">Темп</label>
+        <input class="form__input form__input--temp" placeholder="шаг/мин" />
+      </div>
+      <div class="form__row form__row--hidden">
+        <label class="form__label">Подъём</label>
+        <input class="form__input form__input--climb" placeholder="метров" />
+      </div>
+      <button class="form__btn">OK</button>
+    </form>`
+      );
+
+    // отобразить форму ввода новых данных
     // const classToKeyMap = {
     //   'workout__value--distance': 'distance',
     //   'workout__value--duration': 'duration',
