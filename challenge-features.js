@@ -366,6 +366,9 @@ class App {
     </form>`
       );
 
+    e.target.closest('.workout').style.display = 'block';
+    e.target.closest('.workout').querySelector(form).style.paddingLeft = '0px';
+
     // отобразить форму ввода новых данных
     // const classToKeyMap = {
     //   'workout__value--distance': 'distance',
