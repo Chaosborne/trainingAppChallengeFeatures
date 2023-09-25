@@ -346,6 +346,47 @@ class App {
     //////////////////////// но мы не создаем новый объект, а редактируем существующий
     //////////////////////// потому что надо сохранить id, время и координаты тренировки
 
+    // получаем значение вида тренировки
+    const editInputType = formELem.querySelector('.form__input--type');
+
+    editInputType.addEventListener('change', function () {
+      // этот слушатель просто для проверки того, что значение получается
+      console.log(editInputType.value);
+    });
+
+    const editType = editInputType.value; // здесь получаем значение и по form submit будем отправлять в JSON
+
+    /////////////////////////////////////////////// дальше что взять из этого кода
+    // const distance = +inputDistance.value;
+    // const duration = +inputDuration.value;
+
+    // // Если тренировка является пробежкой, создать объект Running
+    // if (editType === 'running') {
+    //   // const temp = +inputTemp.value;
+    //   // проверка валидности данных
+    //   if (
+    //     !areNumbers(distance, duration, temp) ||
+    //     !areNumbersPositive(distance, duration, temp)
+    //   )
+    //     return alert('Введите положительное число');
+
+    //   // workout = new Running([lat, lng], distance, duration, temp); ??????????????
+    // }
+
+    // // Если тренировка является велотренировкой, создать объект Cycling
+    // if (editType === 'cycling') {
+    //   // const climb = +inputClimb.value;
+    //   // проверка валидности данных
+    //   if (
+    //     !areNumbers(distance, duration, climb) ||
+    //     !areNumbersPositive(distance, duration)
+    //   )
+    //     return alert('Введите положительное число');
+
+    //   // workout = new Cycling([lat, lng], distance, duration, climb); ??????????????
+    // }
+    ///////////////////////////////////////////////
+
     // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
 
     // сохранить в localStorage
