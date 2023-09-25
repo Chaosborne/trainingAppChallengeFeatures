@@ -161,6 +161,7 @@ class App {
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
 
+    // Если тренировка является пробежкой, создать объект Running
     if (type === 'running') {
       const temp = +inputTemp.value;
       // проверка валидности данных
@@ -332,6 +333,7 @@ class App {
     const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
     workoutDetails.forEach(detail => detail.remove());
 
+    // отобразить форму ввода новых данных
     this._showEditFormInsideWorkout(e);
 
     const workoutElem = e.target.closest('.workout');
@@ -340,28 +342,9 @@ class App {
     formELem.style.paddingLeft = '0px';
     formELem.style.marginBottom = '0.6rem';
 
-    // отобразить форму ввода новых данных
-    // const classToKeyMap = {
-    //   'workout__value--distance': 'distance',
-    //   'workout__value--duration': 'duration',
-    //   'workout__value--pace': 'pace',
-    //   'workout__value--temp': 'temp',
-    //   'workout__value--speed': 'speed',
-    //   'workout__value--climb': 'climb',
-    // };
-    // // prettier-ignore
-    // const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
-
-    // workoutDetails.forEach(detail => {
-    //   for (const className in classToKeyMap) {
-    //     if (detail.classList.contains(className)) {
-    //       const key = classToKeyMap[className];
-    //       detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
-
-    //       break; // Break the loop once we've found a matching class
-    //     }
-    //   }
-    // });
+    //////////////////////// ! От выбора типа тренировки менять поля как в 164,
+    //////////////////////// но мы не создаем новый объект, а редактируем существующий
+    //////////////////////// потому что надо сохранить id, время и координаты тренировки
 
     // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
 
