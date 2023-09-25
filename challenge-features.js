@@ -327,28 +327,34 @@ class App {
     const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
     // console.log(workoutJSON);
 
-    // отобразить поля ввода новых данных
-    const classToKeyMap = {
-      'workout__value--distance': 'distance',
-      'workout__value--duration': 'duration',
-      'workout__value--pace': 'pace',
-      'workout__value--temp': 'temp',
-      'workout__value--speed': 'speed',
-      'workout__value--climb': 'climb',
-    };
+    // Удалить отображение старых данных
     // prettier-ignore
-    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
+    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
+    console.log(workoutDetails);
+    workoutDetails.forEach(detail => detail.remove());
 
-    workoutDetails.forEach(detail => {
-      for (const className in classToKeyMap) {
-        if (detail.classList.contains(className)) {
-          const key = classToKeyMap[className];
-          detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+    // отобразить поля ввода новых данных
+    // const classToKeyMap = {
+    //   'workout__value--distance': 'distance',
+    //   'workout__value--duration': 'duration',
+    //   'workout__value--pace': 'pace',
+    //   'workout__value--temp': 'temp',
+    //   'workout__value--speed': 'speed',
+    //   'workout__value--climb': 'climb',
+    // };
+    // // prettier-ignore
+    // const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
 
-          break; // Break the loop once we've found a matching class
-        }
-      }
-    });
+    // workoutDetails.forEach(detail => {
+    //   for (const className in classToKeyMap) {
+    //     if (detail.classList.contains(className)) {
+    //       const key = classToKeyMap[className];
+    //       detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+
+    //       break; // Break the loop once we've found a matching class
+    //     }
+    //   }
+    // });
 
     // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
 
