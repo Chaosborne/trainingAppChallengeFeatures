@@ -116,7 +116,7 @@ class App {
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
 
-    // ОБработка клика на карте
+    // Обработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
 
     // Отображение тренировок из localStorage на карте
