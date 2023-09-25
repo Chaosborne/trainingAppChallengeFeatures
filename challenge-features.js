@@ -161,6 +161,7 @@ class App {
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
 
+    // Если тренировка является пробежкой, создать объект Running
     if (type === 'running') {
       const temp = +inputTemp.value;
       // проверка валидности данных
@@ -295,6 +296,76 @@ class App {
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
     this._workoutBtnClickProcessing(e);
   }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  // Обрабатываем нажатие на кнопки тренировки
+  #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
+
+  _workoutBtnClickProcessing(e) {
+    if (!e.target.classList.contains('workout-btn')) return;
+
+    this.#workoutElem = e.target.closest('.workout');
+
+    if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
+      this._editWorkout();
+    }
+    if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
+      this._removeWorkout();
+    }
+  }
+
+  _editWorkout() {
+    // We edit the ${this.#workoutElem.dataset.id} workout
+
+    // получить localStorage, получить тренировки
+    const workoutsJSON = JSON.parse(localStorage.getItem('workouts'));
+    // prettier-ignore
+    const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
+    // console.log(workoutJSON);
+
+    // отобразить поля ввода новых данных
+    const classToKeyMap = {
+      'workout__value--distance': 'distance',
+      'workout__value--duration': 'duration',
+      'workout__value--pace': 'pace',
+      'workout__value--temp': 'temp',
+      'workout__value--speed': 'speed',
+      'workout__value--climb': 'climb',
+    };
+    // prettier-ignore
+    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
+
+    workoutDetails.forEach(detail => {
+      for (const className in classToKeyMap) {
+        if (detail.classList.contains(className)) {
+          const key = classToKeyMap[className];
+          detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+
+          break; // Break the loop once we've found a matching class
+        }
+      }
+    });
+
+    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
+
+    // сохранить в localStorage
+
+    // отобразить измененный список тренировок
+  }
+
+  _removeWorkout() {
+    // We remove the ${this.#workoutElem.dataset.id} workout
+  }
+
+  //
+  //
+  //
+  //
 
   _addWorkoutsToLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
