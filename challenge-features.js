@@ -116,7 +116,7 @@ class App {
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
 
-    // ОБработка клика на карте
+    // Обработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
 
     // Отображение тренировок из localStorage на карте
@@ -226,12 +226,12 @@ class App {
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
           <span class="workout__icon">${workout.type === 'running' ? '🏃' : '🚵‍♂️'}</span>
-          <span class="workout__value">${workout.distance}</span>
+          <span class="workout__value workout__value--distance">${workout.distance}</span>
           <span class="workout__unit">км</span>
         </div>
         <div class="workout__details">
           <span class="workout__icon">⏱</span>
-          <span class="workout__value">${workout.duration}</span>
+          <span class="workout__value workout__value--duration">${workout.duration}</span>
           <span class="workout__unit">мин</span>
         </div>
         `;
@@ -240,12 +240,12 @@ class App {
       html += `
           <div class="workout__details">
             <span class="workout__icon">📏⏱</span>
-            <span class="workout__value">${workout.pace.toFixed(2)}</span>
+            <span class="workout__value workout__value--pace">${workout.pace.toFixed(2)}</span>
             <span class="workout__unit">м/мин</span>
           </div>
           <div class="workout__details">
             <span class="workout__icon">👟⏱</span>
-            <span class="workout__value">${workout.temp}</span>
+            <span class="workout__value workout__value--temp">${workout.temp}</span>
             <span class="workout__unit">шаг/мин</span>
           </div>
           <div class="workout__btns">
@@ -260,12 +260,12 @@ class App {
       html += `
             <div class="workout__details">
             <span class="workout__icon">📏⏱</span>
-            <span class="workout__value">${workout.speed.toFixed(2)}</span>
+            <span class="workout__value workout__value--speed">${workout.speed.toFixed(2)}</span>
             <span class="workout__unit">км/ч</span>
           </div>
           <div class="workout__details">
             <span class="workout__icon">🏔</span>
-            <span class="workout__value">${workout.climb}</span>
+            <span class="workout__value workout__value--climb">${workout.climb}</span>
             <span class="workout__unit">м</span>
           </div>
           <div class="workout__btns">
@@ -319,10 +319,38 @@ class App {
   }
 
   _editWorkout() {
-    console.log(`We edit the ${this.#workoutElem.dataset.id} workout`);
-    // отобразить поля ввода новых данных
+    // We edit the ${this.#workoutElem.dataset.id} workout
 
-    // получить localStorage, получить тренировки, изменить редактируемую тренировку
+    // получить localStorage, получить тренировки
+    const workoutsJSON = JSON.parse(localStorage.getItem('workouts'));
+    // prettier-ignore
+    const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
+    // console.log(workoutJSON);
+
+    // отобразить поля ввода новых данных
+    const classToKeyMap = {
+      'workout__value--distance': 'distance',
+      'workout__value--duration': 'duration',
+      'workout__value--pace': 'pace',
+      'workout__value--temp': 'temp',
+      'workout__value--speed': 'speed',
+      'workout__value--climb': 'climb',
+    };
+    // prettier-ignore
+    const workoutDetails = this.#workoutElem.querySelectorAll('.workout__value');
+
+    workoutDetails.forEach(detail => {
+      for (const className in classToKeyMap) {
+        if (detail.classList.contains(className)) {
+          const key = classToKeyMap[className];
+          detail.innerHTML = `<input class="form__input form__input--${key}" placeholder="${workoutJSON[key]}" />`;
+
+          break; // Break the loop once we've found a matching class
+        }
+      }
+    });
+
+    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
 
     // сохранить в localStorage
 
@@ -330,7 +358,7 @@ class App {
   }
 
   _removeWorkout() {
-    console.log(`We remove the ${this.#workoutElem.dataset.id} workout`);
+    // We remove the ${this.#workoutElem.dataset.id} workout
   }
 
   //
