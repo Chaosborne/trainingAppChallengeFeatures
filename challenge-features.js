@@ -141,6 +141,7 @@ class App {
   _toggleClimbField() {
     inputClimb.closest('.form__row').classList.toggle('form__row--hidden');
     inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
+    console.log('ok');
   }
 
   _newWorkout(e) {
@@ -336,63 +337,29 @@ class App {
     // отобразить форму ввода новых данных
     this._showEditFormInsideWorkout(e);
 
+    // выбрать и стилить форму
     const workoutElem = e.target.closest('.workout');
-    const formELem = workoutElem.querySelector('.form');
+    const editForm = workoutElem.querySelector('.form');
     workoutElem.style.display = 'block';
-    formELem.style.paddingLeft = '0px';
-    formELem.style.marginBottom = '0.6rem';
+    editForm.style.paddingLeft = '0px';
+    editForm.style.marginBottom = '0.6rem';
 
-    //////////////////////// ! От выбора типа тренировки менять поля как в 164,
-    //////////////////////// но мы не создаем новый объект, а редактируем существующий
-    //////////////////////// потому что надо сохранить id, время и координаты тренировки
-    // git renew
+    editForm.addEventListener('submit', this._processEditFormData.bind(this));
 
-    // получаем значение вида тренировки
-    const editInputType = formELem.querySelector('.form__input--type');
+    // // Добавить новый объект в массив тренировок
+    // this.#workouts.push(workout);
 
-    editInputType.addEventListener('change', function () {
-      // этот слушатель просто для проверки того, что значение получается
-      console.log(editInputType.value);
-    });
+    // // Отобразить тренировку на карте
+    // this._displayWorkout(workout);
 
-    const editType = editInputType.value; // здесь получаем значение и по form submit будем отправлять в JSON
+    // // Отобразить тренировку в списке
+    // this._displayWorkoutOnSidebar(workout);
 
-    /////////////////////////////////////////////// дальше что взять из этого кода
-    // const distance = +inputDistance.value;
-    // const duration = +inputDuration.value;
+    // // Очистить поля ввода данных и спрятать форму
+    // this._hideForm();
 
-    // // Если тренировка является пробежкой, создать объект Running
-    // if (editType === 'running') {
-    //   // const temp = +inputTemp.value;
-    //   // проверка валидности данных
-    //   if (
-    //     !areNumbers(distance, duration, temp) ||
-    //     !areNumbersPositive(distance, duration, temp)
-    //   )
-    //     return alert('Введите положительное число');
-
-    //   // workout = new Running([lat, lng], distance, duration, temp); ??????????????
-    // }
-
-    // // Если тренировка является велотренировкой, создать объект Cycling
-    // if (editType === 'cycling') {
-    //   // const climb = +inputClimb.value;
-    //   // проверка валидности данных
-    //   if (
-    //     !areNumbers(distance, duration, climb) ||
-    //     !areNumbersPositive(distance, duration)
-    //   )
-    //     return alert('Введите положительное число');
-
-    //   // workout = new Cycling([lat, lng], distance, duration, climb); ??????????????
-    // }
-    ///////////////////////////////////////////////
-
-    // Принять новые значения из полей, поместить их в workoutJSON или workoutsJSON
-
-    // сохранить в localStorage
-
-    // отобразить измененный список тренировок
+    // // Добавить все тренировки в локальное хранилище
+    // this._addWorkoutsToLocalStorage();
   }
 
   _showEditFormInsideWorkout(e) {
@@ -406,30 +373,98 @@ class App {
         `<form class="form">
       <div class="form__row">
         <label class="form__label">Тип</label>
-        <select class="form__input form__input--type">
+        <select class="form__input form__input--type-edit">
           <option value="running">Пробежка</option>
           <option value="cycling">Велосипед</option>
         </select>
       </div>
       <div class="form__row">
         <label class="form__label">Расстояние</label>
-        <input class="form__input form__input--distance" placeholder="km" />
+        <input class="form__input form__input--distance-edit" placeholder="km" />
       </div>
       <div class="form__row">
         <label class="form__label">Длительность</label>
-        <input class="form__input form__input--duration" placeholder="мин" />
+        <input class="form__input form__input--duration-edit" placeholder="мин" />
       </div>
       <div class="form__row">
         <label class="form__label">Темп</label>
-        <input class="form__input form__input--temp" placeholder="шаг/мин" />
+        <input class="form__input form__input--temp-edit" placeholder="шаг/мин" />
       </div>
       <div class="form__row form__row--hidden">
         <label class="form__label">Подъём</label>
-        <input class="form__input form__input--climb" placeholder="метров" />
+        <input class="form__input form__input--climb-edit" placeholder="метров" />
       </div>
       <button class="form__btn">OK</button>
     </form>`
       );
+  }
+
+  _processEditFormData(e) {
+    e.preventDefault();
+    const areNumbers = (...numbers) =>
+      numbers.every(num => Number.isFinite(num));
+    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
+
+    console.log(areNumbers());
+    console.log(areNumbersPositive());
+
+    // Теперь надо подставлять Темп или Подъем в зависимости от типа тренировки
+    // заново выбираем элементы с такими классамим, т. к. они новые
+    // prettier-ignore
+    const editInputType = document.querySelector('.form__input--type-edit');
+    // prettier-ignore
+    const editInputDistance = document.querySelector('.form__input--distance-edit');
+    // prettier-ignore
+    const editInputDuration = document.querySelector('.form__input--duration-edit');
+    // prettier-ignore
+    const editInputTemp = document.querySelector('.form__input--temp-edit');
+    // prettier-ignore
+    const editInputClimb = document.querySelector('.form__input--climb-edit');
+
+    editInputType.addEventListener('change', this._toggleClimbField);
+
+    // const { lat, lng } = workoutJSON..latlng;
+    // let workout;
+
+    // Получить данные из формы
+    const type = editInputType.value;
+    const distance = +editInputDistance.value;
+    const duration = +editInputDuration.value;
+
+    console.log(editInputType.value);
+    console.log(editInputDistance.value);
+    console.log(editInputDuration.value);
+    console.log(editInputTemp.value);
+
+    // Если тренировка является пробежкой, создать объект Running
+    if (type === 'running') {
+      const temp = +editInputTemp.value;
+      // проверка валидности данных
+
+      if (
+        !areNumbers(distance, duration, temp) ||
+        !areNumbersPositive(distance, duration, temp)
+      )
+        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
+
+      // вот здесь помещаем новые значения в JSON
+      // console.log(workoutJSON);
+      // workout = new Running([lat, lng], distance, duration, temp);
+    }
+
+    // Если тренировка является велотренировкой, создать объект Cycling
+    if (type === 'cycling') {
+      const climb = +editInputClimb.value;
+      // проверка валидности данных
+      if (
+        !areNumbers(distance, duration, climb) ||
+        !areNumbersPositive(distance, duration)
+      )
+        return alert('Введите положительное число');
+
+      // и здесь помещаем новые значения в JSON
+      // workout = new Cycling([lat, lng], distance, duration, climb);
+    }
   }
 
   _removeWorkout() {
