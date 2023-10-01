@@ -447,6 +447,13 @@ class App {
       )
         return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
+      //
+      //
+      //
+      //
+      //
+      // Теперь поместить новые значения в JSON
+      //
       // вот здесь помещаем новые значения в JSON
       // console.log(workoutJSON);
       // workout = new Running([lat, lng], distance, duration, temp);
