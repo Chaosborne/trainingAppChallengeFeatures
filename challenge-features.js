@@ -141,7 +141,6 @@ class App {
   _toggleClimbField() {
     inputClimb.closest('.form__row').classList.toggle('form__row--hidden');
     inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
-    console.log('ok');
   }
 
   _newWorkout(e) {
@@ -323,12 +322,6 @@ class App {
   _editWorkout(e) {
     // We edit the ${this.#workoutElem.dataset.id} workout
 
-    // получить localStorage, получить тренировки
-    const workoutsJSON = JSON.parse(localStorage.getItem('workouts'));
-    // prettier-ignore
-    const workoutJSON = workoutsJSON.find(el => el.id === this.#workoutElem.dataset.id)
-    // console.log(workoutJSON);
-
     // Удалить отображение старых данных
     // prettier-ignore
     const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
@@ -405,9 +398,6 @@ class App {
       numbers.every(num => Number.isFinite(num));
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
-    console.log(areNumbers());
-    console.log(areNumbersPositive());
-
     // Теперь надо подставлять Темп или Подъем в зависимости от типа тренировки
     // заново выбираем элементы с такими классамим, т. к. они новые
     // prettier-ignore
@@ -423,18 +413,17 @@ class App {
 
     editInputType.addEventListener('change', this._toggleClimbField);
 
-    // const { lat, lng } = workoutJSON..latlng;
-    // let workout;
+    // const { lat, lng } = workoutJSON.latlng;
 
     // Получить данные из формы
     const type = editInputType.value;
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
 
-    console.log(editInputType.value);
-    console.log(editInputDistance.value);
-    console.log(editInputDuration.value);
-    console.log(editInputTemp.value);
+    // console.log(editInputType.value);
+    // console.log(editInputDistance.value);
+    // console.log(editInputDuration.value);
+    // console.log(editInputTemp.value);
 
     // Если тренировка является пробежкой, создать объект Running
     if (type === 'running') {
@@ -456,9 +445,45 @@ class App {
       // Теперь поместить новые значения в JSON
       //
       // вот здесь помещаем новые значения в JSON
-      // console.log(workoutJSON);
-      // workout = new Running([lat, lng], distance, duration, temp);
+      this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
+      // console.log(this.#workouts);
+
+      //
+      // Во this.#workouts найти по id нужный элемент и заменить его свойства
+
+      // выясняем индекс элемента, который нужно изменить
+      // prettier-ignore
+      const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+      console.log(workoutToChangeIndex);
+
+      // заменить значения в workout
+      this.#workouts[workoutToChangeIndex].type = type;
+      this.#workouts[workoutToChangeIndex].distance = distance;
+      this.#workouts[workoutToChangeIndex].duration = duration;
+      this.#workouts[workoutToChangeIndex].temp = temp;
+      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
+      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
+      console.log(this.#workouts);
+
+      // Очистить localStorage
+      localStorage.clear();
+
+      // записать в localStorage новые данные
+      // localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+      // localStorage.setItem('workouts', JSON.stringify(this.#workouts))
+      this._addWorkoutsToLocalStorage();
+      // Сразу отобразить новые данные на боковой панели
+      // можно просто обновить страницу
+      // location.reload();
+      // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
+
+    //
+    //
+    //
+    //
+    ////////////////////////////////////// сделать так, чтобы форма показывала поле temp или climb в зависимости от type
+    ////////////////////////////////////// потом баг с несвоевременным исчезновением формы
 
     // Если тренировка является велотренировкой, создать объект Cycling
     if (type === 'cycling') {
@@ -478,11 +503,6 @@ class App {
   _removeWorkout() {
     // We remove the ${this.#workoutElem.dataset.id} workout
   }
-
-  //
-  //
-  //
-  //
 
   _addWorkoutsToLocalStorage() {
     localStorage.setItem('workouts', JSON.stringify(this.#workouts));
