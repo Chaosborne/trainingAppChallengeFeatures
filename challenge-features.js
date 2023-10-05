@@ -398,12 +398,18 @@ class App {
     const select = target.querySelector('.form__input--type-edit');
 
     if (target.classList.contains('workout--cycling')) {
+      ////////////////////////////////////// сначала в зависимости от типа кликнутой тренировки отображаем temp или climb,
       select.value = 'cycling';
     }
     if (target.classList.contains('workout--running')) {
+      ////////////////////////////////////// сначала в зависимости от типа кликнутой тренировки отображаем temp или climb,
       select.value = 'running';
     }
   }
+  ////////////////////////////////////// пробежке будет соответствовать temp, велосипеду climb
+  ////////////////////////////////////// затем применяем _toggleClimbField()
+  //
+  //
 
   _processEditFormData(e) {
     e.preventDefault();
@@ -480,21 +486,6 @@ class App {
       location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
-
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    ////////////////////////////////////// сначала в зависимости от типа тренировки отображаем temp или climb,
-    ////////////////////////////////////// затем применяем _toggleClimbField()
 
     // Если тренировка является велотренировкой, меняем cycling свойства
     if (type === 'cycling') {
