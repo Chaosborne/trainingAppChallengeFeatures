@@ -394,9 +394,8 @@ class App {
       );
 
     // Устанавливаем value у select формы в зависимости от типа кликнутой тренировки
+    // Устанавливаем input temp или climb в зависимости от от типа кликнутой тренировки
     const select = target.querySelector('.form__input--type-edit');
-
-    console.log(select.value);
 
     if (target.classList.contains('workout--cycling')) {
       select.value = 'cycling';
@@ -439,7 +438,7 @@ class App {
     // console.log(editInputDuration.value);
     // console.log(editInputTemp.value);
 
-    // Если тренировка является пробежкой, создать объект Running
+    // Если тренировка является пробежкой, меняем running свойства
     if (type === 'running') {
       const temp = +editInputTemp.value;
       // проверка валидности данных
@@ -450,20 +449,8 @@ class App {
       )
         return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
-      //
-      //
-      //
-      //
-      //
-      //
-      // Теперь поместить новые значения в JSON
-      //
-      // вот здесь помещаем новые значения в JSON
+      // Помещаем новые значения в JSON
       this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
-      // console.log(this.#workouts);
-
-      //
-      // Во this.#workouts найти по id нужный элемент и заменить его свойства
 
       // выясняем индекс элемента, который нужно изменить
       // prettier-ignore
@@ -484,7 +471,6 @@ class App {
 
       // записать в localStorage новые данные
       // localStorage.setItem('workouts', JSON.stringify(this.#workouts));
-      // localStorage.setItem('workouts', JSON.stringify(this.#workouts))
       this._addWorkoutsToLocalStorage();
       // console.log(localStorage);
 
@@ -499,10 +485,10 @@ class App {
     //
     //
     //
-    ////////////////////////////////////// сделать так, чтобы select показывал Пробежка или Велосипед в зависимости от type
-    ////////////////////////////////////// сделать так, чтобы форма показывала поле temp или climb в зависимости от type
+    ////////////////////////////////////// сначала в зависимости от типа тренировки отображаем temp или climb,
+    ////////////////////////////////////// затем применяем _toggleClimbField()
 
-    // Если тренировка является велотренировкой, создать объект Cycling
+    // Если тренировка является велотренировкой, меняем cycling свойства
     if (type === 'cycling') {
       const climb = +editInputClimb.value;
       // проверка валидности данных
