@@ -472,9 +472,12 @@ class App {
       // localStorage.setItem('workouts', JSON.stringify(this.#workouts));
       // localStorage.setItem('workouts', JSON.stringify(this.#workouts))
       this._addWorkoutsToLocalStorage();
+      // console.log(localStorage);
+
+      containerWorkouts.innerHTML = '';
       // Сразу отобразить новые данные на боковой панели
       // можно просто обновить страницу
-      // location.reload();
+      location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
 
