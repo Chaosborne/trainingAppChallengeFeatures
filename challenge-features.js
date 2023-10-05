@@ -487,7 +487,6 @@ class App {
     //
     //
     //
-    const asdf = 1;
     //
     //
     //
