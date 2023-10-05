@@ -358,7 +358,9 @@ class App {
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
 
-    e.target
+    const target = e.target.closest('.workout');
+
+    target
       .closest('.workout')
       .querySelector('.workout__title')
       .insertAdjacentHTML(
@@ -390,6 +392,18 @@ class App {
       <button class="form__btn">OK</button>
     </form>`
       );
+
+    // Устанавливаем value у select формы в зависимости от типа кликнутой тренировки
+    const select = target.querySelector('.form__input--type-edit');
+
+    console.log(select.value);
+
+    if (target.classList.contains('workout--cycling')) {
+      select.value = 'cycling';
+    }
+    if (target.classList.contains('workout--running')) {
+      select.value = 'running';
+    }
   }
 
   _processEditFormData(e) {
@@ -485,8 +499,8 @@ class App {
     //
     //
     //
+    ////////////////////////////////////// сделать так, чтобы select показывал Пробежка или Велосипед в зависимости от type
     ////////////////////////////////////// сделать так, чтобы форма показывала поле temp или climb в зависимости от type
-    ////////////////////////////////////// потом баг с несвоевременным исчезновением формы
 
     // Если тренировка является велотренировкой, создать объект Cycling
     if (type === 'cycling') {
