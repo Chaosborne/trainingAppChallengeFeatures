@@ -355,12 +355,16 @@ class App {
     // this._addWorkoutsToLocalStorage();
   }
 
+  #editTarget; // will contain a click target when initiate workout edit
+  #editInputClimb;
+  #editInputTemp;
+
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
 
-    const target = e.target.closest('.workout');
+    this.#editTarget = e.target.closest('.workout');
 
-    target
+    this.#editTarget
       .closest('.workout')
       .querySelector('.workout__title')
       .insertAdjacentHTML(
@@ -393,23 +397,40 @@ class App {
     </form>`
       );
 
-    // Устанавливаем value у select формы в зависимости от типа кликнутой тренировки
-    // Устанавливаем input temp или climb в зависимости от от типа кликнутой тренировки
-    const select = target.querySelector('.form__input--type-edit');
+    // Устанавливаем select и инпут в зависимости от вида тренировки
+    // prettier-ignore
+    this.#editInputClimb = this.#editTarget.querySelector('.form__input--climb-edit');
+    // prettier-ignore
+    this.#editInputTemp = this.#editTarget.querySelector('.form__input--temp-edit');
 
-    if (target.classList.contains('workout--cycling')) {
-      ////////////////////////////////////// сначала в зависимости от типа кликнутой тренировки отображаем temp или climb,
+    const climbFormRow = this.#editInputClimb.closest('.form__row');
+    const tempFormRow = this.#editInputTemp.closest('.form__row');
+    const select = this.#editTarget.querySelector('.form__input--type-edit');
+
+    if (this.#editTarget.classList.contains('workout--cycling')) {
       select.value = 'cycling';
+      climbFormRow.classList.remove('form__row--hidden');
+      tempFormRow.closest('.form__row').classList.add('form__row--hidden');
     }
-    if (target.classList.contains('workout--running')) {
-      ////////////////////////////////////// сначала в зависимости от типа кликнутой тренировки отображаем temp или climb,
+    if (this.#editTarget.classList.contains('workout--running')) {
       select.value = 'running';
+      climbFormRow.classList.add('form__row--hidden');
+      tempFormRow.classList.remove('form__row--hidden');
     }
+
+    // Включаем toggle элементам в зависимости от type select
+    //prettier-ignore
+    const editInputType = this.#editTarget.querySelector('.form__input--type-edit');
+    // prettier-ignore
+    editInputType.addEventListener('change', this._toggleEditClimbField.bind(this));
   }
-  ////////////////////////////////////// пробежке будет соответствовать temp, велосипеду climb
-  ////////////////////////////////////// затем применяем _toggleClimbField()
-  //
-  //
+
+  _toggleEditClimbField() {
+    // prettier-ignore
+    this.#editInputClimb.closest('.form__row').classList.toggle('form__row--hidden');
+    // prettier-ignore
+    this.#editInputTemp.closest('.form__row').classList.toggle('form__row--hidden');
+  }
 
   _processEditFormData(e) {
     e.preventDefault();
