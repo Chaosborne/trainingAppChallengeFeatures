@@ -425,7 +425,6 @@ class App {
 
       // выясняем индекс элемента, который нужно изменить
       const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
-      console.log(workoutToChangeIndex);
 
       // заменить значения в workout
       this.#workouts[workoutToChangeIndex].type = type;
@@ -443,16 +442,6 @@ class App {
       // записать в localStorage новые данные
       this._addWorkoutsToLocalStorage();
 
-      //
-      //
-      //
-      //
-      console.log(JSON.parse(localStorage.getItem('workouts')));
-      //
-      //
-      //
-      //
-
       containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
 
       // Теперь отображаем новые данные на боковой панели
@@ -467,21 +456,11 @@ class App {
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
-      //
-      //
-      ///
-      //
-      //
-      //
-      //
-      //
-      //
       // Помещаем новые значения в JSON
       this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
       const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
-      console.log(workoutToChangeIndex);
 
       // заменить значения в workout
       this.#workouts[workoutToChangeIndex].type = type;
@@ -499,34 +478,16 @@ class App {
       // записать в localStorage новые данные
       this._addWorkoutsToLocalStorage();
 
-      //
-      //
-      //
-      //
-      console.log(JSON.parse(localStorage.getItem('workouts')));
-      //
-      //////////////////////////////// в пробежке нет параметра climb, в велосипеде нет параметра temp
-      //////////////////////////////// поэтому, если просто поменять пробежку на темп (будет ошибка?)
-      //////////////////////////////// пока что даже просто не срабатывает, если поменять type select
-      //this.pace = this.duration / this.distance; // min/km
-      //this.speed = (this.distance / this.duration) * 60; // km/h
-
       containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
 
       // Теперь отображаем новые данные на боковой панели
       // можно просто обновить страницу
       location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
     }
+
+    /////////////////////////////////////
+    ///////////////////////////////////// Теперь надо менять цвет и наименование тренировки в отображении
   }
 
   _removeWorkout() {
