@@ -1,5 +1,15 @@
 'use strict';
 
+//
+//
+//
+//
+console.log(JSON.parse(localStorage.getItem('workouts')));
+//
+//
+//
+//
+
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
@@ -273,12 +283,6 @@ class App {
     this._workoutBtnClickProcessing(e);
   }
 
-  //
-  //
-  //
-  //
-  //
-  //
   // Обрабатываем нажатие на кнопки тренировки
   #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
 
@@ -314,21 +318,6 @@ class App {
     editForm.style.marginBottom = '0.6rem';
 
     editForm.addEventListener('submit', this._processEditFormData.bind(this));
-
-    // // Добавить новый объект в массив тренировок
-    // this.#workouts.push(workout);
-
-    // // Отобразить тренировку на карте
-    // this._displayWorkout(workout);
-
-    // // Отобразить тренировку в списке
-    // this._displayWorkoutOnSidebar(workout);
-
-    // // Очистить поля ввода данных и спрятать форму
-    // this._hideForm();
-
-    // // Добавить все тренировки в локальное хранилище
-    // this._addWorkoutsToLocalStorage();
   }
 
   #editTarget; // will contain a click target when initiate workout edit
@@ -424,11 +413,6 @@ class App {
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
 
-    // console.log(editInputType.value);
-    // console.log(editInputDistance.value);
-    // console.log(editInputDuration.value);
-    // console.log(editInputTemp.value);
-
     // Если тренировка является пробежкой, меняем running свойства
     if (type === 'running') {
       const temp = +editInputTemp.value;
@@ -450,18 +434,29 @@ class App {
       this.#workouts[workoutToChangeIndex].temp = temp;
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
-      console.log(this.#workouts);
+      // console.log(this.#workouts);
 
       // Очистить localStorage
       localStorage.clear();
 
       // записать в localStorage новые данные
-      // localStorage.setItem('workouts', JSON.stringify(this.#workouts));
       this._addWorkoutsToLocalStorage();
-      // console.log(localStorage);
 
-      containerWorkouts.innerHTML = '';
-      // Сразу отобразить новые данные на боковой панели
+      //
+      //
+      //
+      //
+      console.log(JSON.parse(localStorage.getItem('workouts')));
+      //
+      //////////////////////////////// в пробежке нет параметра climb, в велосипеде нетпараметра temp
+      //////////////////////////////// поэтому, если просто поменять пробежку на темп (будет ошибка?)
+      //////////////////////////////// пока что даже просто не срабатывает, если поменять type select
+      //
+      //
+
+      containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
+
+      // Теперь отображаем новые данные на боковой панели
       // можно просто обновить страницу
       location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
