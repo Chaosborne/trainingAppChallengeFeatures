@@ -20,7 +20,6 @@ class Workout {
     this.duration = duration; // min
   }
 
-  // prettier-ignore
   _setDescription() {
     this.type === 'running'
       ? (this.description = `Пробежка ${new Intl.DateTimeFormat('Ru-ru').format(this.date)}`)
@@ -107,14 +106,10 @@ class App {
     this.#map = L.map('map').setView(coords, 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
 
-    L.marker(coords)
-      .addTo(this.#map)
-      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-      .openPopup();
+    L.marker(coords).addTo(this.#map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').openPopup();
 
     // Обработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
@@ -133,7 +128,6 @@ class App {
   }
 
   _hideForm() {
-    // prettier-ignore
     inputClimb.value = inputDistance.value = inputDuration.value = inputTemp.value = '';
     form.classList.add('hidden');
   }
@@ -144,8 +138,7 @@ class App {
   }
 
   _newWorkout(e) {
-    const areNumbers = (...numbers) =>
-      numbers.every(num => Number.isFinite(num));
+    const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
 
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
@@ -165,11 +158,7 @@ class App {
     if (type === 'running') {
       const temp = +inputTemp.value;
       // проверка валидности данных
-      if (
-        !areNumbers(distance, duration, temp) ||
-        !areNumbersPositive(distance, duration, temp)
-      )
-        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
+      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
       workout = new Running([lat, lng], distance, duration, temp);
     }
@@ -178,11 +167,7 @@ class App {
     if (type === 'cycling') {
       const climb = +inputClimb.value;
       // проверка валидности данных
-      if (
-        !areNumbers(distance, duration, climb) ||
-        !areNumbersPositive(distance, duration)
-      )
-        return alert('Введите положительное число');
+      if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
       workout = new Cycling([lat, lng], distance, duration, climb);
     }
@@ -203,19 +188,10 @@ class App {
     this._addWorkoutsToLocalStorage();
   }
 
-  // prettier-ignore
   _displayWorkout(workout) {
     L.marker(workout.coords)
       .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 200,
-          minWidth: 100,
-          autoClose: false,
-          closeOnClick: false,
-          className: `${workout.type}-popup`,
-        })
-      )
+      .bindPopup(L.popup({ maxWidth: 200, minWidth: 100, autoClose: false, closeOnClick: false, className: `${workout.type}-popup` }))
       .setPopupContent(`${workout.type === 'running' ? '🏃' : '🚵‍♂️'} ${workout.description}`)
       .openPopup();
   }
@@ -398,9 +374,7 @@ class App {
       );
 
     // Устанавливаем select и инпут в зависимости от вида тренировки
-    // prettier-ignore
     this.#editInputClimb = this.#editTarget.querySelector('.form__input--climb-edit');
-    // prettier-ignore
     this.#editInputTemp = this.#editTarget.querySelector('.form__input--temp-edit');
 
     const climbFormRow = this.#editInputClimb.closest('.form__row');
@@ -419,36 +393,26 @@ class App {
     }
 
     // Включаем toggle элементам в зависимости от type select
-    //prettier-ignore
     const editInputType = this.#editTarget.querySelector('.form__input--type-edit');
-    // prettier-ignore
     editInputType.addEventListener('change', this._toggleEditClimbField.bind(this));
   }
 
   _toggleEditClimbField() {
-    // prettier-ignore
     this.#editInputClimb.closest('.form__row').classList.toggle('form__row--hidden');
-    // prettier-ignore
     this.#editInputTemp.closest('.form__row').classList.toggle('form__row--hidden');
   }
 
   _processEditFormData(e) {
     e.preventDefault();
-    const areNumbers = (...numbers) =>
-      numbers.every(num => Number.isFinite(num));
+    const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
     // Теперь надо подставлять Темп или Подъем в зависимости от типа тренировки
     // заново выбираем элементы с такими классамим, т. к. они новые
-    // prettier-ignore
     const editInputType = document.querySelector('.form__input--type-edit');
-    // prettier-ignore
     const editInputDistance = document.querySelector('.form__input--distance-edit');
-    // prettier-ignore
     const editInputDuration = document.querySelector('.form__input--duration-edit');
-    // prettier-ignore
     const editInputTemp = document.querySelector('.form__input--temp-edit');
-    // prettier-ignore
     const editInputClimb = document.querySelector('.form__input--climb-edit');
 
     editInputType.addEventListener('change', this._toggleClimbField);
@@ -470,17 +434,12 @@ class App {
       const temp = +editInputTemp.value;
       // проверка валидности данных
 
-      if (
-        !areNumbers(distance, duration, temp) ||
-        !areNumbersPositive(distance, duration, temp)
-      )
-        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
+      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
       // Помещаем новые значения в JSON
       this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
-      // prettier-ignore
       const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
       console.log(workoutToChangeIndex);
 
@@ -512,11 +471,7 @@ class App {
     if (type === 'cycling') {
       const climb = +editInputClimb.value;
       // проверка валидности данных
-      if (
-        !areNumbers(distance, duration, climb) ||
-        !areNumbersPositive(distance, duration)
-      )
-        return alert('Введите положительное число');
+      if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
       // и здесь помещаем новые значения в JSON
       // workout = new Cycling([lat, lng], distance, duration, climb);
