@@ -432,6 +432,7 @@ class App {
       this.#workouts[workoutToChangeIndex].distance = distance;
       this.#workouts[workoutToChangeIndex].duration = duration;
       this.#workouts[workoutToChangeIndex].temp = temp;
+      this.#workouts[workoutToChangeIndex].pace = duration / distance; // min/km
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
       // console.log(this.#workouts);
@@ -448,9 +449,7 @@ class App {
       //
       console.log(JSON.parse(localStorage.getItem('workouts')));
       //
-      //////////////////////////////// в пробежке нет параметра climb, в велосипеде нетпараметра temp
-      //////////////////////////////// поэтому, если просто поменять пробежку на темп (будет ошибка?)
-      //////////////////////////////// пока что даже просто не срабатывает, если поменять type select
+      //
       //
       //
 
@@ -468,8 +467,65 @@ class App {
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
-      // и здесь помещаем новые значения в JSON
-      // workout = new Cycling([lat, lng], distance, duration, climb);
+      //
+      //
+      ///
+      //
+      //
+      //
+      //
+      //
+      //
+      // Помещаем новые значения в JSON
+      this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
+
+      // выясняем индекс элемента, который нужно изменить
+      const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+      console.log(workoutToChangeIndex);
+
+      // заменить значения в workout
+      this.#workouts[workoutToChangeIndex].type = type;
+      this.#workouts[workoutToChangeIndex].distance = distance;
+      this.#workouts[workoutToChangeIndex].duration = duration;
+      this.#workouts[workoutToChangeIndex].climb = climb;
+      this.#workouts[workoutToChangeIndex].speed = (distance / duration) * 60; // km/h
+      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
+      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
+      // console.log(this.#workouts);
+
+      // Очистить localStorage
+      localStorage.clear();
+
+      // записать в localStorage новые данные
+      this._addWorkoutsToLocalStorage();
+
+      //
+      //
+      //
+      //
+      console.log(JSON.parse(localStorage.getItem('workouts')));
+      //
+      //////////////////////////////// в пробежке нет параметра climb, в велосипеде нет параметра temp
+      //////////////////////////////// поэтому, если просто поменять пробежку на темп (будет ошибка?)
+      //////////////////////////////// пока что даже просто не срабатывает, если поменять type select
+      //this.pace = this.duration / this.distance; // min/km
+      //this.speed = (this.distance / this.duration) * 60; // km/h
+
+      containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
+
+      // Теперь отображаем новые данные на боковой панели
+      // можно просто обновить страницу
+      location.reload();
+      // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
+      //
     }
   }
 
