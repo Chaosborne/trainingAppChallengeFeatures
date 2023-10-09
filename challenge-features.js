@@ -313,6 +313,7 @@ class App {
   #editTarget; // will contain a click target when initiate workout edit
   #editInputClimb;
   #editInputTemp;
+  #editInputType;
 
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
@@ -372,13 +373,24 @@ class App {
     }
 
     // Включаем toggle элементам в зависимости от type select
-    const editInputType = this.#editTarget.querySelector('.form__input--type-edit');
-    editInputType.addEventListener('change', this._toggleEditClimbField.bind(this));
+    this.#editInputType = this.#editTarget.querySelector('.form__input--type-edit');
+    this.#editInputType.addEventListener('change', this._toggleEditProps.bind(this));
   }
 
-  _toggleEditClimbField() {
+  _toggleEditProps() {
     this.#editInputClimb.closest('.form__row').classList.toggle('form__row--hidden');
     this.#editInputTemp.closest('.form__row').classList.toggle('form__row--hidden');
+
+    if (this.#editInputType.value === 'running') {
+      this.#workoutElem.classList.remove('workout--cycling');
+      this.#workoutElem.classList.add('workout--running');
+      // console.log(this.#workoutElem.classList); // switched to: 'workout', 'workout--cycling'
+    }
+    if (this.#editInputType.value === 'cycling') {
+      this.#workoutElem.classList.remove('workout--running');
+      this.#workoutElem.classList.add('workout--cycling');
+      // console.log(this.#workoutElem.classList); // switched to: 'workout', 'workout--running'
+    }
   }
 
   _processEditFormData(e) {
