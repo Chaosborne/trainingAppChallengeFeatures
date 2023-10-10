@@ -1,5 +1,15 @@
 'use strict';
 
+//
+//
+//
+//
+console.log(JSON.parse(localStorage.getItem('workouts')));
+//
+//
+//
+//
+
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
@@ -314,6 +324,8 @@ class App {
   #editInputClimb;
   #editInputTemp;
   #editInputType;
+  #workoutToChangeIndex;
+  #wType;
 
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
@@ -384,12 +396,10 @@ class App {
     if (this.#editInputType.value === 'running') {
       this.#workoutElem.classList.remove('workout--cycling');
       this.#workoutElem.classList.add('workout--running');
-      // console.log(this.#workoutElem.classList); // switched to: 'workout', 'workout--cycling'
     }
     if (this.#editInputType.value === 'cycling') {
       this.#workoutElem.classList.remove('workout--running');
       this.#workoutElem.classList.add('workout--cycling');
-      // console.log(this.#workoutElem.classList); // switched to: 'workout', 'workout--running'
     }
   }
 
@@ -406,17 +416,16 @@ class App {
     const editInputTemp = document.querySelector('.form__input--temp-edit');
     const editInputClimb = document.querySelector('.form__input--climb-edit');
 
-    editInputType.addEventListener('change', this._toggleClimbField);
-
-    // const { lat, lng } = workoutJSON.latlng;
+    // editInputType.addEventListener('change', this._toggleClimbField); // уже используется правильный элемент в _toggleEditProps()
+    //////////////////////////////////////////////////////////////////// надо пофиксить все эти дубликаты
 
     // Получить данные из формы
-    const type = editInputType.value;
+    this.#wType = editInputType.value;
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
 
     // Если тренировка является пробежкой, меняем running свойства
-    if (type === 'running') {
+    if (this.#wType === 'running') {
       const temp = +editInputTemp.value;
       // проверка валидности данных
 
@@ -426,17 +435,22 @@ class App {
       this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
-      const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+      this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
 
       // заменить значения в workout
-      this.#workouts[workoutToChangeIndex].type = type;
-      this.#workouts[workoutToChangeIndex].distance = distance;
-      this.#workouts[workoutToChangeIndex].duration = duration;
-      this.#workouts[workoutToChangeIndex].temp = temp;
-      this.#workouts[workoutToChangeIndex].pace = duration / distance; // min/km
+      this.#workouts[this.#workoutToChangeIndex].type = this.#wType;
+      this.#workouts[this.#workoutToChangeIndex].distance = distance;
+      this.#workouts[this.#workoutToChangeIndex].duration = duration;
+      this.#workouts[this.#workoutToChangeIndex].temp = temp;
+      this.#workouts[this.#workoutToChangeIndex].pace = duration / distance; // min/km
+
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
       // console.log(this.#workouts);
+
+      ///////////////////////////
+      /////////////////////////// Теперь надо менять наименование тренировки в отображении и помещать его в JSON и local storage
+      this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -453,7 +467,7 @@ class App {
     }
 
     // Если тренировка является велотренировкой, меняем cycling свойства
-    if (type === 'cycling') {
+    if (this.#wType === 'cycling') {
       const climb = +editInputClimb.value;
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
@@ -462,17 +476,21 @@ class App {
       this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
-      const workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+      this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
 
       // заменить значения в workout
-      this.#workouts[workoutToChangeIndex].type = type;
-      this.#workouts[workoutToChangeIndex].distance = distance;
-      this.#workouts[workoutToChangeIndex].duration = duration;
-      this.#workouts[workoutToChangeIndex].climb = climb;
-      this.#workouts[workoutToChangeIndex].speed = (distance / duration) * 60; // km/h
+      this.#workouts[this.#workoutToChangeIndex].type = this.#wType;
+      this.#workouts[this.#workoutToChangeIndex].distance = distance;
+      this.#workouts[this.#workoutToChangeIndex].duration = duration;
+      this.#workouts[this.#workoutToChangeIndex].climb = climb;
+      this.#workouts[this.#workoutToChangeIndex].speed = (distance / duration) * 60; // km/h
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
       // console.log(this.#workouts);
+
+      ///////////////////////////
+      /////////////////////////// Теперь надо менять наименование тренировки в отображении и помещать его в JSON и local storage
+      this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -487,9 +505,28 @@ class App {
       location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
+  }
 
-    /////////////////////////////////////
-    ///////////////////////////////////// Теперь надо менять цвет и наименование тренировки в отображении
+  #changedDescription;
+
+  _changeDescription() {
+    // Разбиваем строку на слова
+    const date = this.#workouts[this.#workoutToChangeIndex].description.split(' ').pop();
+    console.log(`date:`);
+    console.log(date);
+
+    // Формируем новую строку в зависимости от значения type
+    if (this.#wType === 'cycling') {
+      // Если тип велосипед, заменяем слово "Пробежка" на "Велосипед"
+      this.#changedDescription = 'Велосипед ' + date;
+    } else if (this.#wType === 'running') {
+      // Если тип бег, заменяем слово "Велосипед" на "Пробежка"
+      this.#changedDescription = 'Пробежка ' + date;
+    }
+    // console.log(this.#changedDescription);
+    this.#workouts[this.#workoutToChangeIndex].description = this.#changedDescription;
+
+    ////////////////////////////////////////////////
   }
 
   _removeWorkout() {
