@@ -22,8 +22,6 @@ class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10);
 
-  clickNumber = 0;
-
   constructor(coords, distance, duration) {
     this.coords = coords;
     this.distance = distance; // km
@@ -34,10 +32,6 @@ class Workout {
     this.type === 'running'
       ? (this.description = `Пробежка ${new Intl.DateTimeFormat('Ru-ru').format(this.date)}`)
       : (this.description = `Велотренировка ${new Intl.DateTimeFormat('Ru-ru').format(this.date)}`);
-  }
-
-  click() {
-    this.clickNumber++;
   }
 }
 
@@ -131,8 +125,7 @@ class App {
   }
 
   _showForm(e) {
-    // **
-    this.#mapEvent = e; // **
+    this.#mapEvent = e;
     form.classList.remove('hidden');
     inputDistance.focus();
   }
@@ -280,13 +273,13 @@ class App {
     });
 
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
-    this._workoutBtnClickProcessing(e);
+    this._workoutEditBtnClickProcessing(e);
   }
 
   // Обрабатываем нажатие на кнопки тренировки
-  #workoutElem; // для выбора тренировки, кнопку которой кликнули _buttonClickProcessing()
+  #workoutElem; // для выбора тренировки, кнопку которой кликнули _workoutEditBtnClickProcessing()
 
-  _workoutBtnClickProcessing(e) {
+  _workoutEditBtnClickProcessing(e) {
     if (!e.target.classList.contains('workout-btn')) return;
 
     this.#workoutElem = e.target.closest('.workout');
@@ -432,7 +425,7 @@ class App {
       if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
       // Помещаем новые значения в JSON
-      this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
+      // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
       this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
@@ -473,7 +466,7 @@ class App {
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
       // Помещаем новые значения в JSON
-      this._getLocalStorageData(); // Получаем данные из localStorage и помещаем в this.#workouts
+      // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
 
       // выясняем индекс элемента, который нужно изменить
       this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
@@ -489,7 +482,7 @@ class App {
       // console.log(this.#workouts);
 
       ///////////////////////////
-      /////////////////////////// Теперь надо менять наименование тренировки в отображении и помещать его в JSON и local storage
+      /////////////////////////// Теперь надо менять наименование тренировки в отображении
       this._changeDescription();
 
       // Очистить localStorage
@@ -512,8 +505,6 @@ class App {
   _changeDescription() {
     // Разбиваем строку на слова
     const date = this.#workouts[this.#workoutToChangeIndex].description.split(' ').pop();
-    console.log(`date:`);
-    console.log(date);
 
     // Формируем новую строку в зависимости от значения type
     if (this.#wType === 'cycling') {
@@ -523,7 +514,7 @@ class App {
       // Если тип бег, заменяем слово "Велосипед" на "Пробежка"
       this.#changedDescription = 'Пробежка ' + date;
     }
-    // console.log(this.#changedDescription);
+
     this.#workouts[this.#workoutToChangeIndex].description = this.#changedDescription;
 
     ////////////////////////////////////////////////
@@ -539,7 +530,6 @@ class App {
 
   _getLocalStorageData() {
     const data = JSON.parse(localStorage.getItem('workouts'));
-    // console.log(data);
 
     if (!data) return;
 
