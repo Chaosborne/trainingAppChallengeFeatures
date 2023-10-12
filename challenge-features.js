@@ -320,6 +320,7 @@ class App {
   #workoutToChangeIndex;
   #workoutToChange;
   #wType;
+  #changedDescription;
 
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
@@ -378,6 +379,10 @@ class App {
       tempFormRow.classList.remove('form__row--hidden');
     }
 
+    // выясняем индекс элемента и элемент, который нужно изменить
+    this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+    this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
+
     // Включаем toggle элементам в зависимости от type select
     this.#editInputType.addEventListener('change', this._toggleEditProps.bind(this));
   }
@@ -389,19 +394,31 @@ class App {
     if (this.#editInputType.value === 'running') {
       this.#workoutElem.classList.remove('workout--cycling');
       this.#workoutElem.classList.add('workout--running');
-
-      console.log(this.#editInputType.value); // значение селекта
-      // теперь надо получить кликнутую тренировку в JSON и ей назначить описание в зависимости от селекта
-      console.log(this.#workoutToChange);
     }
     if (this.#editInputType.value === 'cycling') {
       this.#workoutElem.classList.remove('workout--running');
       this.#workoutElem.classList.add('workout--cycling');
-
-      console.log(this.#editInputType.value); // значение селекта
-      // теперь надо получить кликнутую тренировку в JSON и ей назначить описание в зависимости от селекта
-      console.log(this.#workoutToChange);
     }
+
+    // Получаем тип тренировки
+    this.#wType = this.#editInputType.value;
+
+    // Разбиваем строку на слова
+    const date = this.#workoutToChange.description.split(' ').pop();
+
+    // Формируем новую строку в зависимости от значения type
+    if (this.#wType === 'cycling') {
+      this.#changedDescription = 'Велосипед ' + date;
+    }
+    if (this.#wType === 'running') {
+      this.#changedDescription = 'Пробежка ' + date;
+    }
+
+    // Отображаем изменение описания в боковой панели
+    this.#workoutElem.querySelector('.workout__title').textContent = `${this.#changedDescription}`;
+
+    // Помещаем описание тренировки в JSON тренировки
+    this.#workoutToChange.description = this.#changedDescription;
   }
 
   _processEditFormData(e) {
@@ -410,28 +427,25 @@ class App {
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
     // Теперь надо подставлять Темп или Подъем в зависимости от типа тренировки
-    // заново выбираем элементы с такими классамим, т. к. они новые
-    // const editInputType = document.querySelector('.form__input--type-edit'); // заменили на this.#editInputType
+    // заново выбираем элементы с такими классамим, т. к. они новые, и некоторые из них мы еще не выбирали в _showEditFormInsideWorkout()
     const editInputDistance = document.querySelector('.form__input--distance-edit');
     const editInputDuration = document.querySelector('.form__input--duration-edit');
-    const editInputTemp = document.querySelector('.form__input--temp-edit');
-    const editInputClimb = document.querySelector('.form__input--climb-edit');
 
     // editInputType.addEventListener('change', this._toggleClimbField); // уже используется правильный элемент в _toggleEditProps()
     //////////////////////////////////////////////////////////////////// надо пофиксить все эти дубликаты
 
-    // выясняем индекс элемента и элемент, который нужно изменить
-    this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
-    this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
+    // // выясняем индекс элемента и элемент, который нужно изменить
+    // this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
+    // this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
 
     // Получить данные из формы
-    this.#wType = this.#editInputType.value;
+    // this.#wType = this.#editInputType.value;
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
 
     // Если тренировка является пробежкой, меняем running свойства
     if (this.#wType === 'running') {
-      const temp = +editInputTemp.value;
+      const temp = +this.#editInputTemp.value;
       // проверка валидности данных
 
       if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
@@ -453,7 +467,7 @@ class App {
 
       ///////////////////////////
       /////////////////////////// Теперь надо менять наименование тренировки в отображении и помещать его в JSON и local storage
-      this._changeDescription();
+      // this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -471,7 +485,7 @@ class App {
 
     // Если тренировка является велотренировкой, меняем cycling свойства
     if (this.#wType === 'cycling') {
-      const climb = +editInputClimb.value;
+      const climb = +this.#editInputClimb.value;
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
 
@@ -491,7 +505,7 @@ class App {
 
       ///////////////////////////
       /////////////////////////// Теперь надо менять наименование тренировки в отображении
-      this._changeDescription();
+      // this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -506,24 +520,6 @@ class App {
       location.reload();
       // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
-  }
-
-  #changedDescription;
-
-  _changeDescription() {
-    // Разбиваем строку на слова
-    const date = this.#workoutToChange.description.split(' ').pop();
-
-    // Формируем новую строку в зависимости от значения type
-    if (this.#wType === 'cycling') {
-      // Если тип велосипед, заменяем слово "Пробежка" на "Велосипед"
-      this.#changedDescription = 'Велосипед ' + date;
-    } else if (this.#wType === 'running') {
-      // Если тип бег, заменяем слово "Велосипед" на "Пробежка"
-      this.#changedDescription = 'Пробежка ' + date;
-    }
-
-    this.#workoutToChange.description = this.#changedDescription;
   }
 
   _removeWorkout() {
