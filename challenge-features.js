@@ -347,7 +347,7 @@ class App {
     if (this.#editTarget.classList.contains('workout--cycling')) {
       this.#editInputType.value = 'cycling';
       climbFormRow.classList.remove('form__row--hidden');
-      tempFormRow.closest('.form__row').classList.add('form__row--hidden');
+      tempFormRow.classList.add('form__row--hidden');
     }
     if (this.#editTarget.classList.contains('workout--running')) {
       this.#editInputType.value = 'running';
