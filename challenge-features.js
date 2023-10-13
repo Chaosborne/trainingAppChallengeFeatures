@@ -71,34 +71,33 @@ class App {
   #map;
   #mapEvent;
   #workouts = [];
+  #workoutElem; // для выбора тренировки, кнопку которой кликнули _workoutEditBtnClickProcessing()
+  #editTarget; // will contain a click target when initiate workout edit
+  #editInputType;
+  #editInputClimb;
+  #editInputTemp;
+  #workoutToChangeIndex;
+  #workoutToChange;
+  #changedDescription;
 
   constructor() {
     // Получение местоположения пользователя
     this._getPosition();
-
     // Получение данных из localStorage
     this._getLocalStorageData();
-
     // Добавление обработчика события
-
     form.addEventListener('submit', this._newWorkout.bind(this));
-
     // Меняем поле Темп на Подъем при выборе Велосипед
     inputType.addEventListener('change', this._toggleClimbField);
-
     // Переход карты к маркеру по клику на тренировку в боковой панели
     containerWorkouts.addEventListener('click', this._moveToWorkout.bind(this));
   }
 
   _getPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        this._loadMap.bind(this),
-
-        function () {
-          alert('Невозможно получить ваше местоположение');
-        }
-      );
+      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), function () {
+        alert('Невозможно получить ваше местоположение');
+      });
     }
   }
 
@@ -117,7 +116,6 @@ class App {
 
     // Обработка клика на карте
     this.#map.on('click', this._showForm.bind(this));
-
     // Отображение тренировок из localStorage на карте
     this.#workouts.forEach(workout => {
       this._displayWorkout(workout);
@@ -142,11 +140,9 @@ class App {
 
   _newWorkout(e) {
     const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
-
     const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
 
     e.preventDefault();
-
     // console.log(mapEvent); // содержит latlng: v {lat: 43.5696294867803, lng: 39.76277768611909} // от latitulde, longitude
 
     const { lat, lng } = this.#mapEvent.latlng; // получаем координаты
@@ -157,36 +153,26 @@ class App {
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
 
-    // Если тренировка является пробежкой, создать объект Running
     if (type === 'running') {
       const temp = +inputTemp.value;
-      // проверка валидности данных
-      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
-
+      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число');
       workout = new Running([lat, lng], distance, duration, temp);
     }
 
-    // Если тренировка является велотренировкой, создать объект Cycling
     if (type === 'cycling') {
       const climb = +inputClimb.value;
-      // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
-
       workout = new Cycling([lat, lng], distance, duration, climb);
     }
 
     // Добавить новый объект в массив тренировок
     this.#workouts.push(workout);
-
     // Отобразить тренировку на карте
     this._displayWorkout(workout);
-
     // Отобразить тренировку в списке
     this._displayWorkoutOnSidebar(workout);
-
     // Очистить поля ввода данных и спрятать форму
     this._hideForm();
-
     // Добавить все тренировки в локальное хранилище
     this._addWorkoutsToLocalStorage();
   }
@@ -199,7 +185,6 @@ class App {
       .openPopup();
   }
 
-  // prettier-ignore
   _displayWorkoutOnSidebar(workout) {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
@@ -264,8 +249,7 @@ class App {
     // Если кликнуть вне элемента workout, мы получим null, нам надо такие клики игнорировать
     if (!workoutElement) return;
 
-    // prettier-ignore
-    const workout = this.#workouts.find(item => item.id === workoutElement.dataset.id)
+    const workout = this.#workouts.find(item => item.id === workoutElement.dataset.id);
 
     this.#map.setView(workout.coords, 15, {
       animate: true,
@@ -273,13 +257,11 @@ class App {
     });
 
     // запускаем функцию для кнопок, как раз удобно, когда клик по контейнеру с тренировками
-    this._workoutEditBtnClickProcessing(e);
+    this._workoutButtonHandler(e);
   }
 
   // Обрабатываем нажатие на кнопки тренировки
-  #workoutElem; // для выбора тренировки, кнопку которой кликнули _workoutEditBtnClickProcessing()
-
-  _workoutEditBtnClickProcessing(e) {
+  _workoutButtonHandler(e) {
     if (!e.target.classList.contains('workout-btn')) return;
 
     this.#workoutElem = e.target.closest('.workout');
@@ -288,7 +270,7 @@ class App {
       this._editWorkout(e);
     }
     if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
-      this._removeWorkout();
+      this._removeWorkout(e);
     }
   }
 
@@ -296,7 +278,6 @@ class App {
     // We edit the ${this.#workoutElem.dataset.id} workout
 
     // Удалить отображение старых данных
-    // prettier-ignore
     const workoutDetails = this.#workoutElem.querySelectorAll('.workout__details');
     workoutDetails.forEach(detail => detail.remove());
 
@@ -312,14 +293,6 @@ class App {
 
     editForm.addEventListener('submit', this._processEditFormData.bind(this));
   }
-
-  #editTarget; // will contain a click target when initiate workout edit
-  #editInputClimb;
-  #editInputTemp;
-  #editInputType;
-  #workoutToChangeIndex;
-  #workoutToChange;
-  #changedDescription;
 
   _showEditFormInsideWorkout(e) {
     if (e.target.closest('.workout').querySelector('.form')) return;
