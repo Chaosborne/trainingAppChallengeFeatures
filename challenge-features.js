@@ -384,6 +384,11 @@ class App {
     this.#workoutToChange.description = this.#changedDescription;
   }
 
+  #temp;
+  #climb;
+  #distance;
+  #duration;
+
   _processEditFormData(e) {
     e.preventDefault();
     const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
@@ -395,64 +400,34 @@ class App {
     const editInputDuration = document.querySelector('.form__input--duration-edit');
 
     // Получить данные из формы
-    const distance = +editInputDistance.value;
-    const duration = +editInputDuration.value;
+    this.#distance = +editInputDistance.value;
+    this.#duration = +editInputDuration.value;
 
-    // Если тренировка является пробежкой, меняем running свойства
     if (this.#editInputType.value === 'running') {
-      const temp = +this.#editInputTemp.value;
+      this.#temp = +this.#editInputTemp.value;
       // проверка валидности данных
-
-      if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
-
-      // заменить значения в workout
-      this.#workoutToChange.type = this.#editInputType.value;
-      this.#workoutToChange.distance = distance;
-      this.#workoutToChange.duration = duration;
-      this.#workoutToChange.temp = temp;
-      this.#workoutToChange.pace = duration / distance; // min/km
-
-      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
-      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
-
-      // Очистить localStorage
-      localStorage.clear();
-
-      // записать в localStorage новые данные
-      this._addWorkoutsToLocalStorage();
-
-      containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
-
-      // Теперь отображаем новые данные на боковой панели
-      location.reload();
+      if (!areNumbers(this.#distance, this.#duration, this.#temp) || !areNumbersPositive(this.#distance, this.#duration, this.#temp))
+        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
     }
-
-    // Если тренировка является велотренировкой, меняем cycling свойства
     if (this.#editInputType.value === 'cycling') {
-      const climb = +this.#editInputClimb.value;
+      this.#climb = +this.#editInputClimb.value;
       // проверка валидности данных
-      if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
-
-      // заменить значения в workout
-      this.#workoutToChange.type = this.#editInputType.value;
-      this.#workoutToChange.distance = distance;
-      this.#workoutToChange.duration = duration;
-      this.#workoutToChange.climb = climb;
-      this.#workoutToChange.speed = (distance / duration) * 60; // km/h
-      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
-      // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
-
-      // Очистить localStorage
-      localStorage.clear();
-
-      // записать в localStorage новые данные
-      this._addWorkoutsToLocalStorage();
-
-      containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
-
-      // Теперь отображаем новые данные на боковой панели
-      location.reload();
+      if (!areNumbers(this.#distance, this.#duration, this.#climb) || !areNumbersPositive(this.#distance, this.#duration))
+        return alert('Введите положительное число');
     }
+
+    this.#workoutToChange.type = this.#editInputType.value;
+    this.#workoutToChange.distance = this.#distance;
+    this.#workoutToChange.duration = this.#duration;
+    this.#workoutToChange && (this.#workoutToChange.temp = this.#temp);
+    this.#workoutToChange && (this.#workoutToChange.climb = this.#climb);
+    this.#workoutToChange && (this.#workoutToChange.pace = this.#duration / this.#distance); // min/km
+    this.#workoutToChange && (this.#workoutToChange.speed = (this.#distance / this.#duration) * 60); // km/h
+
+    localStorage.clear(); // Очистить localStorage
+    this._addWorkoutsToLocalStorage(); // записать в localStorage новые данные
+    containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
+    location.reload(); // Теперь отображаем новые данные на боковой панели
   }
 
   _removeWorkout() {
