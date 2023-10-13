@@ -391,27 +391,18 @@ class App {
     this.#editInputClimb.closest('.form__row').classList.toggle('form__row--hidden');
     this.#editInputTemp.closest('.form__row').classList.toggle('form__row--hidden');
 
-    if (this.#editInputType.value === 'running') {
-      this.#workoutElem.classList.remove('workout--cycling');
-      this.#workoutElem.classList.add('workout--running');
-    }
-    if (this.#editInputType.value === 'cycling') {
-      this.#workoutElem.classList.remove('workout--running');
-      this.#workoutElem.classList.add('workout--cycling');
-    }
-
-    // Получаем тип тренировки
     this.#wType = this.#editInputType.value;
 
-    // Разбиваем строку на слова
     const date = this.#workoutToChange.description.split(' ').pop();
 
     // Формируем новую строку в зависимости от значения type
     if (this.#wType === 'cycling') {
       this.#changedDescription = 'Велосипед ' + date;
+      this.#workoutElem.classList.replace('workout--cycling', 'workout--running');
     }
     if (this.#wType === 'running') {
       this.#changedDescription = 'Пробежка ' + date;
+      this.#workoutElem.classList.replace('workout--running', 'workout--cycling');
     }
 
     // Отображаем изменение описания в боковой панели
