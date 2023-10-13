@@ -79,6 +79,10 @@ class App {
   #workoutToChangeIndex;
   #workoutToChange;
   #changedDescription;
+  #temp;
+  #climb;
+  #distance;
+  #duration;
 
   constructor() {
     // Получение местоположения пользователя
@@ -379,39 +383,30 @@ class App {
 
     // Отображаем изменение описания в боковой панели
     this.#workoutElem.querySelector('.workout__title').textContent = `${this.#changedDescription}`;
-
     // Помещаем описание тренировки в JSON тренировки
     this.#workoutToChange.description = this.#changedDescription;
   }
 
-  #temp;
-  #climb;
-  #distance;
-  #duration;
-
   _processEditFormData(e) {
     e.preventDefault();
-    const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
-    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
-
     // Теперь надо подставлять Темп или Подъем в зависимости от типа тренировки
     // заново выбираем элементы с такими классамим, т. к. они новые, и некоторые из них мы еще не выбирали в _showEditFormInsideWorkout()
     const editInputDistance = document.querySelector('.form__input--distance-edit');
     const editInputDuration = document.querySelector('.form__input--duration-edit');
 
-    // Получить данные из формы
+    const areNumbers = (...numbers) => numbers.every(num => Number.isFinite(num));
+    const areNumbersPositive = (...numbers) => numbers.every(num => num > 0);
+
     this.#distance = +editInputDistance.value;
     this.#duration = +editInputDuration.value;
 
     if (this.#editInputType.value === 'running') {
       this.#temp = +this.#editInputTemp.value;
-      // проверка валидности данных
       if (!areNumbers(this.#distance, this.#duration, this.#temp) || !areNumbersPositive(this.#distance, this.#duration, this.#temp))
-        return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
+        return alert('Введите положительное число');
     }
     if (this.#editInputType.value === 'cycling') {
       this.#climb = +this.#editInputClimb.value;
-      // проверка валидности данных
       if (!areNumbers(this.#distance, this.#duration, this.#climb) || !areNumbersPositive(this.#distance, this.#duration))
         return alert('Введите положительное число');
     }
