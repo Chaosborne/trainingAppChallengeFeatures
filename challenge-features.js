@@ -351,7 +351,7 @@ class App {
       tempFormRow.classList.remove('form__row--hidden');
     }
 
-    // выясняем индекс элемента и элемент, который нужно изменить
+    // выясняем индекс элемента и элемент, который будем изменяить через эту форму
     this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
     this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
 
@@ -394,13 +394,6 @@ class App {
     const editInputDistance = document.querySelector('.form__input--distance-edit');
     const editInputDuration = document.querySelector('.form__input--duration-edit');
 
-    // editInputType.addEventListener('change', this._toggleClimbField); // уже используется правильный элемент в _toggleEditProps()
-    //////////////////////////////////////////////////////////////////// надо пофиксить все эти дубликаты
-
-    // // выясняем индекс элемента и элемент, который нужно изменить
-    // this.#workoutToChangeIndex = this.#workouts.findIndex(workout => workout.id === `${this.#workoutElem.dataset.id}`);
-    // this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
-
     // Получить данные из формы
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
@@ -412,10 +405,6 @@ class App {
 
       if (!areNumbers(distance, duration, temp) || !areNumbersPositive(distance, duration, temp)) return alert('Введите положительное число'); // guard clause - Тоже тренд современного JS
 
-      //
-      // Помещаем новые значения в JSON
-      // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
-
       // заменить значения в workout
       this.#workoutToChange.type = this.#editInputType.value;
       this.#workoutToChange.distance = distance;
@@ -425,11 +414,6 @@ class App {
 
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
-      // console.log(this.#workouts);
-
-      ///////////////////////////
-      /////////////////////////// Теперь надо менять наименование тренировки в отображении и помещать его в JSON и local storage
-      // this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -440,9 +424,7 @@ class App {
       containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
 
       // Теперь отображаем новые данные на боковой панели
-      // можно просто обновить страницу
       location.reload();
-      // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
 
     // Если тренировка является велотренировкой, меняем cycling свойства
@@ -450,10 +432,6 @@ class App {
       const climb = +this.#editInputClimb.value;
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
-
-      //
-      // Помещаем новые значения в JSON
-      // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
 
       // заменить значения в workout
       this.#workoutToChange.type = this.#editInputType.value;
@@ -463,11 +441,6 @@ class App {
       this.#workoutToChange.speed = (distance / duration) * 60; // km/h
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].temp = editInputTemp.value);
       // this.#workouts[workoutToChangeIndex] && (this.#workouts[workoutToChangeIndex].climb = editInputClimb.value);
-      // console.log(this.#workouts);
-
-      ///////////////////////////
-      /////////////////////////// Теперь надо менять наименование тренировки в отображении
-      // this._changeDescription();
 
       // Очистить localStorage
       localStorage.clear();
@@ -478,9 +451,7 @@ class App {
       containerWorkouts.innerHTML = ''; // сначала очищаем контейнер для красоты работы интерфейса
 
       // Теперь отображаем новые данные на боковой панели
-      // можно просто обновить страницу
       location.reload();
-      // можно присвоить текущей тренировке - HTML элементу textContent или innerHTML
     }
   }
 
