@@ -404,20 +404,27 @@ class App {
       this.#temp = +this.#editInputTemp.value;
       if (!areNumbers(this.#distance, this.#duration, this.#temp) || !areNumbersPositive(this.#distance, this.#duration, this.#temp))
         return alert('Введите положительное число');
+
+      this.#workoutToChange.temp = this.#temp;
+      this.#workoutToChange.pace = this.#duration / this.#distance;
+      if (this.#workoutToChange && this.#workoutToChange.climb) delete this.#workoutToChange.climb;
+      if (this.#workoutToChange && this.#workoutToChange.speed) delete this.#workoutToChange.speed;
     }
+
     if (this.#editInputType.value === 'cycling') {
       this.#climb = +this.#editInputClimb.value;
       if (!areNumbers(this.#distance, this.#duration, this.#climb) || !areNumbersPositive(this.#distance, this.#duration))
         return alert('Введите положительное число');
+
+      this.#workoutToChange.climb = this.#climb;
+      this.#workoutToChange.speed = (this.#distance / this.#duration) * 60;
+      if (this.#workoutToChange && this.#workoutToChange.temp) delete this.#workoutToChange.temp;
+      if (this.#workoutToChange && this.#workoutToChange.pace) delete this.#workoutToChange.pace;
     }
 
     this.#workoutToChange.type = this.#editInputType.value;
     this.#workoutToChange.distance = this.#distance;
     this.#workoutToChange.duration = this.#duration;
-    this.#workoutToChange && (this.#workoutToChange.temp = this.#temp);
-    this.#workoutToChange && (this.#workoutToChange.climb = this.#climb);
-    this.#workoutToChange && (this.#workoutToChange.pace = this.#duration / this.#distance); // min/km
-    this.#workoutToChange && (this.#workoutToChange.speed = (this.#distance / this.#duration) * 60); // km/h
 
     localStorage.clear(); // Очистить localStorage
     this._addWorkoutsToLocalStorage(); // записать в localStorage новые данные
