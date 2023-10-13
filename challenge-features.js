@@ -319,7 +319,6 @@ class App {
   #editInputType;
   #workoutToChangeIndex;
   #workoutToChange;
-  #wType;
   #changedDescription;
 
   _showEditFormInsideWorkout(e) {
@@ -391,18 +390,18 @@ class App {
     this.#editInputClimb.closest('.form__row').classList.toggle('form__row--hidden');
     this.#editInputTemp.closest('.form__row').classList.toggle('form__row--hidden');
 
-    this.#wType = this.#editInputType.value;
-
+    // Разбиваем строку на слова
     const date = this.#workoutToChange.description.split(' ').pop();
 
-    // Формируем новую строку в зависимости от значения type
-    if (this.#wType === 'cycling') {
-      this.#changedDescription = 'Велосипед ' + date;
+    if (this.#editInputType.value === 'running') {
       this.#workoutElem.classList.replace('workout--cycling', 'workout--running');
+
+      this.#changedDescription = 'Пробежка ' + date; // Формируем новую строку в зависимости от значения type
     }
-    if (this.#wType === 'running') {
-      this.#changedDescription = 'Пробежка ' + date;
+    if (this.#editInputType.value === 'cycling') {
       this.#workoutElem.classList.replace('workout--running', 'workout--cycling');
+
+      this.#changedDescription = 'Велосипед ' + date; // Формируем новую строку в зависимости от значения type
     }
 
     // Отображаем изменение описания в боковой панели
@@ -430,12 +429,11 @@ class App {
     // this.#workoutToChange = this.#workouts[this.#workoutToChangeIndex];
 
     // Получить данные из формы
-    // this.#wType = this.#editInputType.value;
     const distance = +editInputDistance.value;
     const duration = +editInputDuration.value;
 
     // Если тренировка является пробежкой, меняем running свойства
-    if (this.#wType === 'running') {
+    if (this.#editInputType.value === 'running') {
       const temp = +this.#editInputTemp.value;
       // проверка валидности данных
 
@@ -446,7 +444,7 @@ class App {
       // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
 
       // заменить значения в workout
-      this.#workoutToChange.type = this.#wType;
+      this.#workoutToChange.type = this.#editInputType.value;
       this.#workoutToChange.distance = distance;
       this.#workoutToChange.duration = duration;
       this.#workoutToChange.temp = temp;
@@ -475,7 +473,7 @@ class App {
     }
 
     // Если тренировка является велотренировкой, меняем cycling свойства
-    if (this.#wType === 'cycling') {
+    if (this.#editInputType.value === 'cycling') {
       const climb = +this.#editInputClimb.value;
       // проверка валидности данных
       if (!areNumbers(distance, duration, climb) || !areNumbersPositive(distance, duration)) return alert('Введите положительное число');
@@ -485,7 +483,7 @@ class App {
       // this._getLocalStorageData(); // выполнено в конструкторе App при загрузке страницы // Получаем данные из localStorage и помещаем в this.#workouts
 
       // заменить значения в workout
-      this.#workoutToChange.type = this.#wType;
+      this.#workoutToChange.type = this.#editInputType.value;
       this.#workoutToChange.distance = distance;
       this.#workoutToChange.duration = duration;
       this.#workoutToChange.climb = climb;
