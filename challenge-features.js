@@ -270,12 +270,8 @@ class App {
 
     this.#workoutElem = e.target.closest('.workout');
 
-    if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) {
-      this._editWorkout(e);
-    }
-    if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) {
-      this._removeWorkout(e);
-    }
+    if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) this._editWorkout(e);
+    if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) this._removeWorkout(e);
   }
 
   _editWorkout(e) {
