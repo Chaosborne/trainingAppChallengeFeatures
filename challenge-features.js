@@ -430,6 +430,11 @@ class App {
 
   _removeWorkout() {
     // We remove the ${this.#workoutElem.dataset.id} workout
+    this.#workouts = this.#workouts.filter(el => el.id != this.#workoutElem.dataset.id);
+    localStorage.removeItem('workouts');
+    // localStorage.clear();
+    this._addWorkoutsToLocalStorage();
+    location.reload();
   }
 
   _addWorkoutsToLocalStorage() {
