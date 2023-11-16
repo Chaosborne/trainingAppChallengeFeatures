@@ -220,7 +220,7 @@ a:visited {
   border-left: 5px solid var(--color-brand--1);
 }
 
-.workout-edit__btn {
+/* .workout-edit__btn {
   border: none;
   border-radius: 4px;
   padding: 11px;
@@ -228,4 +228,4 @@ a:visited {
   margin-top: 7px;
   margin-bottom: 5px;
   background-color: rgb(225, 225, 225);
-}
+} */

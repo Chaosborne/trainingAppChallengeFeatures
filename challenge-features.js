@@ -220,10 +220,11 @@ class App {
           <div class="workout__btns">
             <button class="workout-btn workout__edit-btn">Edit</button>
             <button class="workout-btn workout__delete-btn">Remove</button>
-          </div>
-        </li>
-        
-      `;
+            <button class="workout-btn workout__delete-all-btn">Remove All</button>
+            </div>
+            </li>
+            
+            `;
     }
     if (workout.type === 'cycling') {
       html += `
@@ -236,10 +237,11 @@ class App {
             <span class="workout__icon">🏔</span>
             <span class="workout__value workout__value--climb">${workout.climb}</span>
             <span class="workout__unit">м</span>
-          </div>
+            </div>
           <div class="workout__btns">
-            <button class="workout-btn workout__edit-btn">Edit</button>
-            <button class="workout-btn workout__delete-btn">Remove</button>
+          <button class="workout-btn workout__edit-btn">Edit</button>
+          <button class="workout-btn workout__delete-btn">Remove</button>
+          <button class="workout-btn workout__delete-all-btn">Remove All</button>
           </div>
         </li>
       `;
@@ -272,6 +274,7 @@ class App {
 
     if (e.target === this.#workoutElem.querySelector('.workout__edit-btn')) this._editWorkout(e);
     if (e.target === this.#workoutElem.querySelector('.workout__delete-btn')) this._removeWorkout(e);
+    if (e.target === this.#workoutElem.querySelector('.workout__delete-all-btn')) this._removeAllWorkouts(e);
   }
 
   _editWorkout(e) {
@@ -428,13 +431,19 @@ class App {
     location.reload(); // Теперь отображаем новые данные на боковой панели
   }
 
-  _removeWorkout() {
+  _removeWorkout(e) {
+    e.preventDefault();
     // We remove the ${this.#workoutElem.dataset.id} workout
     this.#workouts = this.#workouts.filter(el => el.id != this.#workoutElem.dataset.id);
     localStorage.removeItem('workouts');
     // localStorage.clear();
     this._addWorkoutsToLocalStorage();
     location.reload();
+  }
+
+  _removeAllWorkouts(e) {
+    e.preventDefault();
+    this.reset();
   }
 
   _addWorkoutsToLocalStorage() {

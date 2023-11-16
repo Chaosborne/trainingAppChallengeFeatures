@@ -1,11 +1,10 @@
 .workout__btns {
     display: flex;
-    flex-direction: row;
+    /* flex-direction: row; */
     gap: 10px;
 }
 
-.workout__edit-btn,
-.workout__delete-btn {
+.workout-btn {
     margin: 5px 0 7px;
     padding: 7px 15px;
     border: 1px solid;
