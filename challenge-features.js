@@ -4,7 +4,7 @@
 //
 //
 //
-console.log(`Local Storage: ${JSON.parse(localStorage.getItem("workouts"))}`);
+console.log(JSON.parse(localStorage.getItem("workouts")));
 //
 //
 //
