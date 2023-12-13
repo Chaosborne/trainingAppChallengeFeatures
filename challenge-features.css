@@ -4,8 +4,7 @@
     gap: 10px;
 }
 
-.workout__edit-btn,
-.workout__delete-btn {
+.workout-btn {
     margin: 5px 0 7px;
     padding: 7px 15px;
     border: 1px solid;
@@ -13,4 +12,8 @@
     border-radius: 7px;
     color: #fff;
     background: #3f464d;
+}
+
+.workout__delete-all-btn {
+    min-width: 100px;
 }
