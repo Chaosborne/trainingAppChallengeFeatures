@@ -11,6 +11,7 @@ console.log(JSON.parse(localStorage.getItem("workouts")));
 //
 //
 
+const sortWorkoutsBtn = document.querySelector(".workout__sort-img");
 const form = document.querySelector(".form");
 const containerWorkouts = document.querySelector(".workouts");
 const inputType = document.querySelector(".form__input--type");
@@ -96,21 +97,6 @@ class App {
     inputType.addEventListener("change", this._toggleClimbField);
     // Переход карты к маркеру по клику на тренировку в боковой панели
     containerWorkouts.addEventListener("click", this._moveToWorkout.bind(this));
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    // Отображаем sort btn, если есть тренировки
-    this._showSortBtn();
   }
 
   _getPosition() {
@@ -189,12 +175,12 @@ class App {
     this.#workouts.push(workout);
     // Отобразить тренировку на карте
     this._displayWorkout(workout);
-    // Отобразить тренировку в списке
-    this._displayWorkoutOnSidebar(workout);
     // Очистить поля ввода данных и спрятать форму
     this._hideForm();
     // Добавить все тренировки в локальное хранилище
     this._addWorkoutsToLocalStorage();
+    // Отобразить тренировку в списке
+    this._displayWorkoutOnSidebar(workout);
   }
 
   _displayWorkout(workout) {
@@ -264,6 +250,15 @@ class App {
     }
 
     form.insertAdjacentHTML("afterend", html);
+
+    this._showSortBtn();
+  }
+
+  _showSortBtn() {
+    // здесь парсим свежее состояние хранилища на лету, к прошлым переменным не обращаемся
+    if (JSON.parse(localStorage.getItem("workouts")).length > 1) {
+      sortWorkoutsBtn.classList.remove("workout__sort-img--hidden");
+    }
   }
 
   _moveToWorkout(e) {
@@ -465,34 +460,8 @@ class App {
   }
 
   _getLocalStorageData() {
-    const data = JSON.parse(localStorage.getItem("workouts"));
-
-    if (!data) return;
-
-    this.#workouts = data;
-
-    this.#workouts.forEach((workout) => {
-      this._displayWorkoutOnSidebar(workout);
-    });
-  }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  _showSortBtn() {
-    if (JSON.parse(localStorage.getItem("workouts")).length > 1) {
-      console.log("There are more than one workout");
-    }
+    this.#workouts = JSON.parse(localStorage.getItem("workouts"));
+    this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
   }
 
   reset() {
