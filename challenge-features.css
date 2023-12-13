@@ -1,26 +1,29 @@
+.workout__sort-img--hidden {
+  display: none;
+}
+
 .workout__btns {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    grid-column: 1 / -1;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  grid-column: 1 / -1;
 }
 
 .workout-btn {
-    margin: 5px 0 7px;
-    padding: 7px 15px;
-    border: 1px solid;
-    border-color: #fff;
-    border-radius: 7px;
-    color: #fff;
-    background: #3f464d;
+  margin: 5px 0 7px;
+  padding: 7px 15px;
+  border: 1px solid;
+  border-color: #fff;
+  border-radius: 7px;
+  color: #fff;
+  background: #3f464d;
 }
 
 .workout__delete-all-btn {
-    min-width: 100px;
+  min-width: 100px;
 }
 
 .workout__sort-img {
-    width: 16px;
-    margin-left: 80%;
-    margin-top: 8px;
+  width: 16px;
+  margin: 0 20px 15px auto;
 }
