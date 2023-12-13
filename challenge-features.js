@@ -276,6 +276,7 @@ class App {
     if (e.target === this.#workoutElem.querySelector(".workout__edit-btn")) this._editWorkout(e);
     if (e.target === this.#workoutElem.querySelector(".workout__delete-btn")) this._removeWorkout(e);
     if (e.target === this.#workoutElem.querySelector(".workout__delete-all-btn")) this._removeAllWorkouts(e);
+    if (e.target === this.#workoutElem.querySelector(".workout__sort-img")) this._showSortList(e);
   }
 
   _editWorkout(e) {
