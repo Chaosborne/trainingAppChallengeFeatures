@@ -18,3 +18,9 @@
 .workout__delete-all-btn {
     min-width: 100px;
 }
+
+.workout__sort-img {
+    width: 16px;
+    margin-left: 80%;
+    margin-top: 8px;
+}
