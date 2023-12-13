@@ -4,7 +4,8 @@
 //
 //
 //
-console.log(`Local Storage: ${JSON.parse(localStorage.getItem("workouts"))}`);
+console.log(`Local Storage:`);
+console.log(JSON.parse(localStorage.getItem("workouts")));
 //
 //
 //
@@ -95,6 +96,21 @@ class App {
     inputType.addEventListener("change", this._toggleClimbField);
     // Переход карты к маркеру по клику на тренировку в боковой панели
     containerWorkouts.addEventListener("click", this._moveToWorkout.bind(this));
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    // Отображаем sort btn, если есть тренировки
+    this._showSortBtn();
   }
 
   _getPosition() {
@@ -193,7 +209,6 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
-        <img class="workout__sort-img" src="/sort.svg"></img>
         <div class="workout__details">
           <span class="workout__icon">${workout.type === "running" ? "🏃" : "🚵‍♂️"}</span>
           <span class="workout__value workout__value--distance">${workout.distance}</span>
@@ -276,7 +291,6 @@ class App {
     if (e.target === this.#workoutElem.querySelector(".workout__edit-btn")) this._editWorkout(e);
     if (e.target === this.#workoutElem.querySelector(".workout__delete-btn")) this._removeWorkout(e);
     if (e.target === this.#workoutElem.querySelector(".workout__delete-all-btn")) this._removeAllWorkouts(e);
-    if (e.target === this.#workoutElem.querySelector(".workout__sort-img")) this._showSortList(e);
   }
 
   _editWorkout(e) {
@@ -460,6 +474,25 @@ class App {
     this.#workouts.forEach((workout) => {
       this._displayWorkoutOnSidebar(workout);
     });
+  }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  _showSortBtn() {
+    if (JSON.parse(localStorage.getItem("workouts")).length > 1) {
+      console.log("There are more than one workout");
+    }
   }
 
   reset() {
