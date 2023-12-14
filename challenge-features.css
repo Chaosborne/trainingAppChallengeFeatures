@@ -12,6 +12,7 @@
   background-color: #0a151d;
   border: 1px solid;
   border-radius: 7px;
+  outline: none;
 }
 
 .workout__btns {
