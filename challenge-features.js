@@ -4,8 +4,8 @@
 //
 //
 //
-console.log(`Local Storage:`);
-console.log(JSON.parse(localStorage.getItem("workouts")));
+// console.log(`Local Storage:`);
+// console.log(JSON.parse(localStorage.getItem("workouts")));
 //
 //
 //
@@ -460,7 +460,9 @@ class App {
   }
 
   _getLocalStorageData() {
-    this.#workouts = JSON.parse(localStorage.getItem("workouts"));
+    // this.#workouts = JSON.parse(localStorage.getItem("workouts"));
+    const storedWorkouts = localStorage.getItem("workouts");
+    this.#workouts = storedWorkouts ? JSON.parse(storedWorkouts) : [];
     this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
   }
 
