@@ -11,7 +11,7 @@ console.log(JSON.parse(localStorage.getItem("workouts")));
 //
 //
 
-const sortWorkoutsBtn = document.querySelector(".workout__sort-img");
+const sortControls = document.querySelector(".sort-options");
 const form = document.querySelector(".form");
 const containerWorkouts = document.querySelector(".workouts");
 const inputType = document.querySelector(".form__input--type");
@@ -251,13 +251,13 @@ class App {
 
     form.insertAdjacentHTML("afterend", html);
 
-    this._showSortBtn();
+    this._showSortControls();
   }
 
-  _showSortBtn() {
+  _showSortControls() {
     // здесь парсим свежее состояние хранилища на лету, к прошлым переменным не обращаемся
     if (JSON.parse(localStorage.getItem("workouts")).length > 1) {
-      sortWorkoutsBtn.classList.remove("workout__sort-img--hidden");
+      sortControls.classList.remove("sort-options--hidden");
     }
   }
 

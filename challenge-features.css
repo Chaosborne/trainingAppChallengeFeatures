@@ -1,5 +1,17 @@
-.workout__sort-img--hidden {
+
+.sort-options--hidden {
   display: none;
+}
+
+.sort-options {
+  margin-right: 0px;
+  margin-left: auto;
+  margin-bottom: 15px;
+  padding: 5px;
+  color: rgb(168, 168, 168);
+  background-color: #0a151d;
+  border: 1px solid;
+  border-radius: 7px;
 }
 
 .workout__btns {
@@ -21,9 +33,4 @@
 
 .workout__delete-all-btn {
   min-width: 100px;
-}
-
-.workout__sort-img {
-  width: 16px;
-  margin: 0 20px 15px auto;
 }
