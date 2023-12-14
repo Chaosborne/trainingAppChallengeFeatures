@@ -97,6 +97,8 @@ class App {
     inputType.addEventListener("change", this._toggleClimbField);
     // Переход карты к маркеру по клику на тренировку в боковой панели
     containerWorkouts.addEventListener("click", this._moveToWorkout.bind(this));
+    // Слушаем select сортировки тренировок
+    sortControls.addEventListener("change", this._sortWorkouts.bind(this));
   }
 
   _getPosition() {
@@ -438,6 +440,47 @@ class App {
     this._addWorkoutsToLocalStorage(); // записать в localStorage новые данные
     containerWorkouts.innerHTML = ""; // сначала очищаем контейнер для красоты работы интерфейса
     location.reload(); // Теперь отображаем новые данные на боковой панели
+  }
+
+  _sortWorkouts(e) {
+    const value = sortControls.value.slice(3);
+    this.#workouts.sort((a, b) => a[value] - b[value]);
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //  тренировки в массиве сортируются, тепер нужно отобразить их в новом порядке без перезугрузки страницы
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
   }
 
   _removeWorkout(e) {
