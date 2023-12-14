@@ -28,7 +28,12 @@
 <body>
   <div class="sidebar">
     <img src="/icon.png" alt="icon" class="icon" />
-    <img class="workout__sort-img workout__sort-img--hidden" src="/sort.svg" alt="">
+
+    <select class="sort-options sort-options--hidden">
+      <option>By duration</option>
+      <option>By distance</option>
+    </select>
+
     <ul class="workouts">
       <!-- эта форма - для кликов на карте, отображается до появления тренировки  -->
       <form class="form hidden">
@@ -112,7 +117,8 @@
     </p> -->
     <p class="footer__copyright">
       &copy;
-      <a class="footer__link masters-of-code-link" target="_blank" href="https://himmelen.space">fictional web studio</a>.
+      <a class="footer__link masters-of-code-link" target="_blank" href="https://himmelen.space">fictional web
+        studio</a>.
     </p>
   </div>
 
