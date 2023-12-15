@@ -11,6 +11,7 @@
 //
 //
 
+const workoutsContainer = document.querySelector(".workouts-container");
 const sortControls = document.querySelector(".sort-options");
 const form = document.querySelector(".form");
 const containerWorkouts = document.querySelector(".workouts");
@@ -251,7 +252,7 @@ class App {
       `;
     }
 
-    form.insertAdjacentHTML("afterend", html);
+    workoutsContainer.insertAdjacentHTML("afterbegin", html);
 
     this._showSortControls();
   }
@@ -445,42 +446,8 @@ class App {
   _sortWorkouts(e) {
     const value = sortControls.value.slice(3);
     this.#workouts.sort((a, b) => a[value] - b[value]);
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //  тренировки в массиве сортируются, тепер нужно отобразить их в новом порядке без перезугрузки страницы
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
+    workoutsContainer.innerHTML = "";
+    this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
   }
 
   _removeWorkout(e) {
@@ -490,12 +457,19 @@ class App {
     localStorage.removeItem("workouts");
     // localStorage.clear();
     this._addWorkoutsToLocalStorage();
-    location.reload();
+
+    workoutsContainer.innerHTML = "";
+    this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
+    //////////////////////////////////////////////////// найти как удалять с карты
+    // location.reload();
   }
 
   _removeAllWorkouts(e) {
     e.preventDefault();
+
     this.reset();
+    // localStorage.removeItem("workouts");
+    // workoutsContainer.innerHTML = "";
   }
 
   _addWorkoutsToLocalStorage() {
