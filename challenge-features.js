@@ -452,6 +452,11 @@ class App {
 
   _removeWorkout(e) {
     e.preventDefault();
+
+    const id = e.target.closest(".workout").dataset.id;
+    const targetWorkout = this.#workouts.find((w) => w.id === id);
+    const targetCoords = targetWorkout.coords;
+
     // We remove the ${this.#workoutElem.dataset.id} workout
     this.#workouts = this.#workouts.filter((el) => el.id != this.#workoutElem.dataset.id);
     localStorage.removeItem("workouts");
@@ -460,7 +465,15 @@ class App {
 
     workoutsContainer.innerHTML = "";
     this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
-    //////////////////////////////////////////////////// найти как удалять с карты
+
+    // удаление маркера
+    this.#map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        const { lat, lng } = layer.getLatLng();
+        if (lat === targetCoords[0] && lng === targetCoords[1]) this.#map.removeLayer(layer);
+      }
+    }, this); // Важно передать this вторым параметром, чтобы использовать его внутри функции
+
     // location.reload();
   }
 
