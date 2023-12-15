@@ -480,9 +480,14 @@ class App {
   _removeAllWorkouts(e) {
     e.preventDefault();
 
-    this.reset();
-    // localStorage.removeItem("workouts");
-    // workoutsContainer.innerHTML = "";
+    localStorage.removeItem("workouts");
+    workoutsContainer.innerHTML = "";
+
+    this.#map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) this.#map.removeLayer(layer);
+    }, this);
+
+    // this.reset();
   }
 
   _addWorkoutsToLocalStorage() {
