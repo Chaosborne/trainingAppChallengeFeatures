@@ -212,22 +212,22 @@ class App {
 
     if (workout.type === "running") {
       html += `
-          <div class="workout__details">
-            <span class="workout__icon">📏⏱</span>
-            <span class="workout__value workout__value--pace">${workout.pace.toFixed(2)}</span>
-            <span class="workout__unit">м/мин</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">👟⏱</span>
-            <span class="workout__value workout__value--temp">${workout.temp}</span>
-            <span class="workout__unit">шаг/мин</span>
-          </div>
-          <div class="workout__btns">
-            <button class="workout-btn workout__edit-btn">Edit</button>
-            <button class="workout-btn workout__delete-btn">Remove</button>
-            <button class="workout-btn workout__delete-all-btn">Remove All</button>
-            </div>
-            </li>
+        <div class="workout__details">
+          <span class="workout__icon">📏⏱</span>
+          <span class="workout__value workout__value--pace">${workout.pace.toFixed(2)}</span>
+          <span class="workout__unit">м/мин</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">👟⏱</span>
+          <span class="workout__value workout__value--temp">${workout.temp}</span>
+          <span class="workout__unit">шаг/мин</span>
+        </div>
+        <div class="workout__btns">
+          <button class="workout-btn workout__edit-btn">Edit</button>
+          <button class="workout-btn workout__delete-btn">Remove</button>
+          <button class="workout-btn workout__delete-all-btn">Remove All</button>
+        </div>
+      </li>
             
             `;
     }
@@ -254,14 +254,13 @@ class App {
 
     workoutsContainer.insertAdjacentHTML("afterbegin", html);
 
-    this._showSortControls();
+    this._toggleDisplaySortControls();
   }
 
-  _showSortControls() {
+  _toggleDisplaySortControls() {
     // здесь парсим свежее состояние хранилища на лету, к прошлым переменным не обращаемся
-    if (JSON.parse(localStorage.getItem("workouts")).length > 1) {
-      sortControls.classList.remove("sort-options--hidden");
-    }
+    const action = JSON.parse(localStorage.getItem("workouts")).length > 1 ? "Show" : "Hide";
+    sortControls.classList.toggle("sort-options--hidden", action === "Hide");
   }
 
   _moveToWorkout(e) {
@@ -486,6 +485,10 @@ class App {
     this.#map.eachLayer((layer) => {
       if (layer instanceof L.Marker) this.#map.removeLayer(layer);
     }, this);
+
+    ///////////////////////////////////////
+    // Пофиксить не удаление sort controls
+    ///////////////////////////////////////
 
     // this.reset();
   }
