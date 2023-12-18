@@ -259,7 +259,7 @@ class App {
 
   _toggleDisplaySortControls() {
     // здесь парсим свежее состояние хранилища на лету, к прошлым переменным не обращаемся
-    const action = JSON.parse(localStorage.getItem("workouts")).length > 1 ? "Show" : "Hide";
+    const action = JSON.parse(localStorage.getItem("workouts"))?.length > 1 ? "Show" : "Hide";
     sortControls.classList.toggle("sort-options--hidden", action === "Hide");
   }
 
@@ -459,7 +459,6 @@ class App {
     // We remove the ${this.#workoutElem.dataset.id} workout
     this.#workouts = this.#workouts.filter((el) => el.id != this.#workoutElem.dataset.id);
     localStorage.removeItem("workouts");
-    // localStorage.clear();
     this._addWorkoutsToLocalStorage();
 
     workoutsContainer.innerHTML = "";
@@ -480,15 +479,13 @@ class App {
     e.preventDefault();
 
     localStorage.removeItem("workouts");
+    this.#workouts = [];
     workoutsContainer.innerHTML = "";
+    this._toggleDisplaySortControls();
 
     this.#map.eachLayer((layer) => {
       if (layer instanceof L.Marker) this.#map.removeLayer(layer);
     }, this);
-
-    ///////////////////////////////////////
-    // Пофиксить не удаление sort controls
-    ///////////////////////////////////////
 
     // this.reset();
   }
