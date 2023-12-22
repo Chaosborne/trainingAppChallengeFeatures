@@ -224,8 +224,8 @@ class App {
         </div>
         <div class="workout__btns">
           <button class="workout-btn workout__edit-btn">Edit</button>
-          <button class="workout-btn workout__delete-btn">Remove</button>
-          <button class="workout-btn workout__delete-all-btn">Remove All</button>
+          <button class="workout-btn workout__remove-btn">Remove</button>
+          <button class="workout-btn workout__remove-all-btn">Remove All</button>
         </div>
       </li>
             
@@ -245,8 +245,8 @@ class App {
             </div>
           <div class="workout__btns">
           <button class="workout-btn workout__edit-btn">Edit</button>
-          <button class="workout-btn workout__delete-btn">Remove</button>
-          <button class="workout-btn workout__delete-all-btn">Remove All</button>
+          <button class="workout-btn workout__remove-btn">Remove</button>
+          <button class="workout-btn workout__remove-all-btn">Remove All</button>
           </div>
         </li>
       `;
@@ -269,6 +269,9 @@ class App {
     if (!workoutElement) return;
 
     const workout = this.#workouts.find((item) => item.id === workoutElement.dataset.id);
+    if (!workout) return; // Добавлено в результате появления метода _confirmWorkoutRemove()
+    // между обработкой кнопок в _workoutButtonHandler(e)
+    // и _removeWorkout() / _removeAllWorkouts()
 
     this.#map.setView(workout.coords, 15, {
       animate: true,
@@ -286,8 +289,13 @@ class App {
     this.#workoutElem = e.target.closest(".workout");
 
     if (e.target === this.#workoutElem.querySelector(".workout__edit-btn")) this._editWorkout(e);
-    if (e.target === this.#workoutElem.querySelector(".workout__delete-btn")) this._removeWorkout(e);
-    if (e.target === this.#workoutElem.querySelector(".workout__delete-all-btn")) this._removeAllWorkouts(e);
+    if (e.target === this.#workoutElem.querySelector(".workout__remove-btn")) this._confirmWorkoutRemove(e);
+    if (e.target === this.#workoutElem.querySelector(".workout__remove-all-btn")) this._confirmWorkoutRemove(e);
+    // в _moveToWorkout(e) пришлось добавить if (!workout) return;
+
+    // Вариант вызова напрямую, не вызывающий ошибки в _moveToWorkout(e)
+    // if (e.target === this.#workoutElem.querySelector(".workout__remove-btn")) this._removeWorkout(e);
+    // if (e.target === this.#workoutElem.querySelector(".workout__remove-all-btn")) this._removeAllWorkouts(e);
   }
 
   _editWorkout(e) {
@@ -447,6 +455,39 @@ class App {
     this.#workouts.sort((a, b) => a[value] - b[value]);
     workoutsContainer.innerHTML = "";
     this.#workouts.forEach((workout) => this._displayWorkoutOnSidebar(workout));
+  }
+
+  _confirmWorkoutRemove(e) {
+    e.preventDefault();
+
+    const workout = e.target.closest(".workout");
+
+    workout.insertAdjacentHTML(
+      "afterbegin",
+      `
+      <div class="confirmation">
+      <div class="confirmation-text">Remove?</div>
+      <div class="confirmation__btns">
+      <button class="confirm-btn" data-action="yes">Yes</button>
+      <button class="confirm-btn" data-action="no">No</button>
+      </div>
+      </div>
+      `
+    );
+
+    const workoutEvent = e;
+    const removeWorkoutHit = e.target.classList.contains("workout__remove-btn");
+    const removeAllWorkoutsHit = e.target.classList.contains("workout__remove-all-btn");
+
+    document.querySelector(".confirmation__btns").addEventListener(
+      "click",
+      function (e) {
+        const action = e.target.dataset.action;
+        if (action === "yes" && removeWorkoutHit) this._removeWorkout(workoutEvent);
+        if (action === "yes" && removeAllWorkoutsHit) this._removeAllWorkouts(workoutEvent);
+        if (action === "no") document.querySelector(".confirmation").remove();
+      }.bind(this)
+    );
   }
 
   _removeWorkout(e) {
